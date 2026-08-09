@@ -8,7 +8,7 @@ flowchart LR
     EPD[528×792 e-ink panel]
 
     X3 -->|Bearer token, state and history every cycle| HA
-    FS -->|optional settings and cached entity ID| X3
+    FS -->|settings, cached entity ID and last successful reading| X3
     X3 -->|native 1-bit portrait framebuffer| EPD
     X3 -->|deep sleep for remainder of 60 s cycle| X3
 ```
@@ -28,10 +28,25 @@ logo or Wi-Fi progress screen. Manual entry from the CrossPoint home menu still
 shows status and permits backing out. The display is always forced to portrait
 orientation.
 
-An RTC marker records that SugarTV owns the next scheduled wake. If the X3's
-shared ADC-button GPIO reports a short, unverified wake instead of the timer,
-the marker keeps the SugarTV cycle alive and re-arms the next minute. A verified
-power-button hold clears the marker and returns to the normal CrossPoint UI.
+Each successful cycle stores the small normalized reading record and its fetch
+time in `/.crosspoint/sugartv-reading.json`. If Wi-Fi connection, Home Assistant
+access, or the selected sensor fails on a later cycle, the renderer uses that
+record instead of silently retaining an apparently current frame. The cached
+value, trend, delta, displayed age, and battery percentage are frozen; only an
+upper-left `Update failed` status and the local date and time of the failed
+attempt are added. The next timer wake retries the normal data path. With no
+cached success, the main value is `N/A`.
+
+Headless Wi-Fi reconnect first tries the last successful saved network. An
+early cold-radio failure falls back to a fresh scan of visible saved networks;
+the original network receives one additional attempt only when that scan
+confirms it is reachable. The explicit one-shot retry state keeps the workflow
+bounded across unavailable or changing networks.
+
+An RTC marker records that SugarTV owns the next scheduled wake. A short
+power-button press wakes the X3, runs an immediate SugarTV update, and re-arms
+the next minute. A verified power-button hold clears the marker and returns to
+the normal CrossPoint UI.
 
 ## Home Assistant data flow
 
@@ -85,7 +100,8 @@ of absolute measurement time; `relative_time: false` restores the clock form.
 Normal readings are black on white. Low and high readings add a border. Urgent
 low and urgent high readings invert the frame. When age-state visualization is
 enabled, aging is dithered only with `dim_by_age` and stale data is always
-dithered. Battery percentage is drawn afterward so it remains legible.
+dithered. Battery percentage and any failed-attempt status are drawn afterward
+so they remain legible.
 
 Age-state visualization is disabled by default on the dedicated device, so
 aging and stale readings retain full ink density while their textual age keeps

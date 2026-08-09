@@ -6,13 +6,21 @@ Assistant state and history itself, renders a native 528×792 portrait frame,
 and wakes once per minute. No laptop, display server, or Lovelace card is
 required at runtime.
 
+While the SugarTV cycle is active, a short power-button press wakes the X3 and
+requests an immediate update instead of waiting for the next timer wake. Holding
+the power button exits the cycle and returns to the normal CrossPoint UI.
+
 The screen follows the behavior of `homeassistant-sugartv-card`: source and
 trend resolution for common glucose integrations, measurement timestamps,
 history-derived delta and cadence, prediction text, threshold states, relative
 time, missing data, and cadence-based aging. Color semantics are translated to
 the one-bit panel: low and high readings gain an outline, urgent readings invert
 the frame, and stale readings use ordered ink density. The upper-right value is
-the battery percentage measured by the X3.
+the battery percentage measured by the X3. If Wi-Fi, Home Assistant, or the
+configured glucose sensor is unavailable, the last successful reading remains
+visible without changing its value, trend, delta, displayed age, or battery
+percentage. Only an upper-left `Update failed` status and the local date and
+time of the failed attempt are added.
 
 This is an informational display, not a medical device or a source for
 treatment decisions.
@@ -57,6 +65,17 @@ sensor whose Home Assistant `device_class` is
 `blood_glucose_concentration`. The selected entity is cached, and a failed
 entity request causes rediscovery. A temporarily `unknown` or `unavailable`
 reading does not discard the cached source.
+
+The latest successful reading is cached in
+`/.crosspoint/sugartv-reading.json`. A failed automatic cycle renders that
+cached reading exactly as it appeared on the last successful cycle, adds the
+failed attempt time in the upper left, then retries on the next one-minute wake.
+If no successful reading has been cached, the main value is `N/A`.
+
+On a cold wake, SugarTV first tries the last successful saved Wi-Fi network. If
+the radio rejects that early attempt, a fresh scan tries visible saved networks
+and permits one scan-confirmed retry of the original network. The attempt set
+remains bounded, so an unavailable network cannot trap the device awake.
 
 An optional `/.crosspoint/sugartv.json` file overrides discovery and display
 defaults. The shared fields use the same names as `homeassistant-sugartv-card`:
@@ -113,9 +132,10 @@ aging code compiled into the firmware. The preview is not a second Python
 implementation: it compiles and executes the same C++ frame renderer, bitmap
 fonts, layout, and icon assets as the X3. Its tests reject clipped pixels, lock
 the default framebuffer with a golden digest, and cover prediction placement,
-threshold states, age density, missing history, unknown trend, and the complete
-visual matrix. The final command above writes that matrix to `/tmp` for local
-inspection without adding generated device data to the repository.
+threshold states, age density, missing history, unknown trend, the failed-update
+badge, and the complete visual matrix. The final command above writes that
+matrix to `/tmp` for local inspection without adding generated device data to
+the repository.
 
 The sleep lifecycle requires a hardware soak test after flashing. Observe at
 least 15 consecutive one-minute updates with the X3 disconnected from USB, then
