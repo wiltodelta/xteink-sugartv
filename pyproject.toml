@@ -1,0 +1,99 @@
+[project]
+name = "xteink-sugartv"
+version = "0.1.0"
+description = "Direct Home Assistant glucose firmware and reference renderer for the Xteink X3"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE", "LICENSES/*"]
+keywords = ["esp32-c3", "home-assistant", "xteink", "e-ink", "glucose"]
+dependencies = [
+    "fastapi>=0.116.0",
+    "httpx>=0.28.0",
+    "pillow>=11.0.0",
+    "pydantic>=2.11.0",
+    "uvicorn>=0.35.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx2>=2.10.0",
+    "pyright>=1.1.403",
+    "pytest>=8.4.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.12.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xteink_sugartv"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+exclude = ["_refs"]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "ANN",
+    "B",
+    "C4",
+    "COM",
+    "DTZ",
+    "E",
+    "F",
+    "G",
+    "I",
+    "ICN",
+    "PIE",
+    "PT",
+    "RET",
+    "RUF",
+    "S",
+    "SIM",
+    "T20",
+    "TCH",
+    "UP",
+]
+ignore = ["ANN401", "COM812"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = ["G004", "S108", "S310", "T20"]
+"tests/**" = ["S101", "S105", "S106", "S108"]
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+
+[tool.pyright]
+include = ["src", "tests"]
+pythonVersion = "3.11"
+typeCheckingMode = "strict"
+# FastAPI registers these handlers through decorators, which Pyright does not
+# count as direct function access.
+reportUnusedFunction = false
+
+[[tool.pyright.executionEnvironments]]
+root = "tests"
+extraPaths = ["src"]
+# Starlette's TestClient and direct tests of private pure helpers require these
+# test-only relaxations. Production code remains fully strict below.
+reportAttributeAccessIssue = false
+reportArgumentType = false
+reportFunctionMemberAccess = false
+reportMissingTypeArgument = false
+reportOptionalMemberAccess = false
+reportOptionalSubscript = false
+reportPrivateUsage = false
+reportUnknownArgumentType = false
+reportUnknownMemberType = false
+reportUnknownVariableType = false
+
+[[tool.pyright.executionEnvironments]]
+root = "src"

@@ -1,0 +1,17 @@
+{
+  "glucose_value": "sensor.jane_glucose_value",
+  "glucose_trend": "sensor.jane_glucose_trend",
+  "timestamp_attribute": "measurement_timestamp",
+  "show_prediction": true,
+  "relative_time": true,
+  "dim_by_age": false,
+  "color_thresholds": false,
+  "thresholds": {
+    "urgent_low": 54,
+    "low": 70,
+    "high": 180,
+    "urgent_high": 250
+  },
+  "show_age_states": false,
+  "decimal_comma": false
+}
