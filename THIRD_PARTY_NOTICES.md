@@ -11,8 +11,8 @@ The original license is reproduced in [`LICENSES/CrossPoint-MIT.txt`](LICENSES/C
 
 ## Material Design Icons
 
-The `mdi:help-circle-outline` and `mdi:progress-clock` paths in the firmware
-patch come from Material Design Icons 7.4.47 by
+The firmware patch uses the `mdi:arrow-*`, `mdi:chevron-double-*`,
+`mdi:help-circle-outline`, and `mdi:progress-clock` paths from Material Design Icons 7.4.47 by
 [Pictogrammers](https://pictogrammers.com/library/mdi/). The icons are licensed
 under Apache License 2.0. The license is reproduced in
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt).

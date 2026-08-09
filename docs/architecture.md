@@ -98,7 +98,8 @@ glucose zones use the normal black-on-white composition. Setting
 
 The value remains visually centered whether prediction text is present or not.
 Supported readings include mg/dL and mmol/L, including an optional decimal
-comma. Missing values render as English `N/A`, the card's exact
+comma. Missing values render as English `N/A`, with the same Material Design
+Icons trend glyphs as SugarTV Card, the
 `mdi:help-circle-outline` unknown-trend icon, and a pending delta clock.
 
 ## Trust boundary
