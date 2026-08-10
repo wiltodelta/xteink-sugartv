@@ -114,9 +114,9 @@ def _format_age(reading: GlucoseReading, now: datetime, russian: bool) -> str:
     if minutes < 1:
         return "сейчас" if russian else "now"
     if minutes < 60:
-        return f"{minutes} мин. назад" if russian else f"{minutes} min. ago"
+        return f"{minutes} мин назад" if russian else f"{minutes} min ago"
     hours = round(minutes / 60)
-    return f"{hours} ч. назад" if russian else f"{hours} hr. ago"
+    return f"{hours} ч назад" if russian else f"{hours} hr ago"
 
 
 def _format_time(reading: GlucoseReading, now: datetime, settings: Settings) -> str:

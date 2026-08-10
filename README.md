@@ -75,7 +75,9 @@ If no successful reading has been cached, the main value is `N/A`.
 On a cold wake, SugarTV first tries the last successful saved Wi-Fi network. If
 the radio rejects that early attempt, a fresh scan tries visible saved networks
 and permits one scan-confirmed retry of the original network. The attempt set
-remains bounded, so an unavailable network cannot trap the device awake.
+remains bounded, so an unavailable network cannot trap the device awake. A
+manually selected open network is saved automatically with an empty password so
+later headless wakes can reconnect to it.
 
 An optional `/.crosspoint/sugartv.json` file overrides discovery and display
 defaults. The shared fields use the same names as `homeassistant-sugartv-card`:

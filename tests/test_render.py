@@ -11,6 +11,7 @@ from xteink_sugartv.render import (
     WIDTH,
     _fit_wrapped_text,
     _font_path,
+    _format_age,
     _prediction,
     _text_width,
     render_frame,
@@ -56,6 +57,15 @@ def test_relative_age_changes_the_frame_cache_key_material() -> None:
     second = first + timedelta(minutes=1)
     settings = Settings(relative_time=True)
     assert render_frame(reading(), first, settings) != render_frame(reading(), second, settings)
+
+
+def test_relative_age_matches_card_abbreviation_style() -> None:
+    now = datetime(2026, 8, 8, 12, 0, tzinfo=UTC)
+
+    assert _format_age(reading(age_minutes=14), now, russian=False) == "14 min ago"
+    assert _format_age(reading(age_minutes=14), now, russian=True) == "14 мин назад"
+    assert _format_age(reading(age_minutes=180), now, russian=False) == "3 hr ago"
+    assert _format_age(reading(age_minutes=180), now, russian=True) == "3 ч назад"
 
 
 def test_reading_without_prediction_is_vertically_centered() -> None:

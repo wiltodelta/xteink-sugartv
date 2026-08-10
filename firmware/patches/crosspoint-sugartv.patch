@@ -6328,7 +6328,7 @@ index 84bd62ec..80a91d51 100644
    int getMenuItemCount() const;
 diff --git a/src/activities/network/SugarTvActivity.cpp b/src/activities/network/SugarTvActivity.cpp
 new file mode 100644
-index 00000000..639ec836
+index 00000000..7fd33744
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.cpp
 @@ -0,0 +1,748 @@
@@ -6906,9 +6906,9 @@ index 00000000..639ec836
 +    } else if (ageMinutes < 1) {
 +      strlcpy(timeText, "now", sizeof(timeText));
 +    } else if (ageMinutes < 60) {
-+      snprintf(timeText, sizeof(timeText), "%ld min. ago", ageMinutes);
++      snprintf(timeText, sizeof(timeText), "%ld min ago", ageMinutes);
 +    } else {
-+      snprintf(timeText, sizeof(timeText), "%ld hr. ago", lround(static_cast<double>(ageMinutes) / 60.0));
++      snprintf(timeText, sizeof(timeText), "%ld hr ago", lround(static_cast<double>(ageMinutes) / 60.0));
 +    }
 +  } else if (reading.measuredAt != 0) {
 +    struct tm local = {};
@@ -8036,7 +8036,7 @@ index 00000000..d57d0111
 +
 +}  // namespace sugartv
 diff --git a/src/activities/network/WifiSelectionActivity.cpp b/src/activities/network/WifiSelectionActivity.cpp
-index 6e73a7a8..5941bc53 100644
+index 6e73a7a8..be3c8385 100644
 --- a/src/activities/network/WifiSelectionActivity.cpp
 +++ b/src/activities/network/WifiSelectionActivity.cpp
 @@ -40,9 +40,15 @@ void WifiSelectionActivity::onEnter() {
@@ -8078,7 +8078,23 @@ index 6e73a7a8..5941bc53 100644
    autoConnecting = false;
    manualNetworkListRequested = false;
    state = WifiSelectionState::NETWORK_LIST;
-@@ -277,13 +292,14 @@ bool WifiSelectionActivity::hasAttemptedAutoSsid(const std::string& ssid) const
+@@ -212,11 +227,12 @@ void WifiSelectionActivity::selectNetwork(const int index) {
+
+   // Check if we have saved credentials for this network
+   const auto savedCred = WIFI_STORE.findCredential(selectedSSID);
+-  if (savedCred && !savedCred->password.empty()) {
+-    // Use saved password - connect directly
++  if (savedCred) {
++    // Use saved credentials, including an empty password for an open network.
+     enteredPassword = savedCred->password;
+     usedSavedPassword = true;
+-    LOG_DBG("WiFi", "Using saved password for %s, length: %zu", selectedSSID.c_str(), enteredPassword.size());
++    LOG_DBG("WiFi", "Using saved credentials for %s, password length: %zu", selectedSSID.c_str(),
++            enteredPassword.size());
+     attemptConnection();
+     return;
+   }
+@@ -277,13 +293,14 @@ bool WifiSelectionActivity::hasAttemptedAutoSsid(const std::string& ssid) const
    return std::find(autoAttemptedSsids.begin(), autoAttemptedSsids.end(), ssid) != autoAttemptedSsids.end();
  }
 
@@ -8096,7 +8112,7 @@ index 6e73a7a8..5941bc53 100644
    selectedSSID = cred.ssid;
    enteredPassword = cred.password;
    selectedRequiresPassword = !cred.password.empty();
-@@ -296,6 +312,18 @@ bool WifiSelectionActivity::tryAutoConnectCredential(const WifiCredential& cred)
+@@ -296,6 +313,18 @@ bool WifiSelectionActivity::tryAutoConnectCredential(const WifiCredential& cred)
  }
 
  bool WifiSelectionActivity::tryNextSavedNetworkFromScan() {
@@ -8115,7 +8131,7 @@ index 6e73a7a8..5941bc53 100644
    for (const auto& network : networks) {
      if (!network.hasSavedPassword || hasAttemptedAutoSsid(network.ssid)) {
        continue;
-@@ -317,6 +345,10 @@ void WifiSelectionActivity::handleAutoConnectFailure() {
+@@ -317,6 +346,10 @@ void WifiSelectionActivity::handleAutoConnectFailure() {
      if (tryNextSavedNetworkFromScan()) {
        return;
      }
@@ -8126,7 +8142,7 @@ index 6e73a7a8..5941bc53 100644
      autoConnecting = false;
      state = WifiSelectionState::NETWORK_LIST;
      selectedNetworkIndex = 0;
-@@ -324,6 +356,10 @@ void WifiSelectionActivity::handleAutoConnectFailure() {
+@@ -324,6 +357,10 @@ void WifiSelectionActivity::handleAutoConnectFailure() {
      return;
    }
 
@@ -8137,7 +8153,39 @@ index 6e73a7a8..5941bc53 100644
    startWifiScan(true);
  }
 
-@@ -760,6 +796,10 @@ std::string WifiSelectionActivity::getSignalStrengthIndicator(const int32_t rssi
+@@ -415,19 +452,24 @@ void WifiSelectionActivity::checkConnectionStatus() {
+       WIFI_STORE.setLastConnectedSsid(selectedSSID);
+     }
+
+-    // If we entered a new password, ask if user wants to save it
+-    // Otherwise, immediately complete so parent can start web server
+     if (!usedSavedPassword && !enteredPassword.empty()) {
++      // Password-bearing credentials still require explicit confirmation.
+       state = WifiSelectionState::SAVE_PROMPT;
+       savePromptSelection = 0;  // Default to "Yes"
+       requestUpdate();
++      return;
++    }
++
++    if (!usedSavedPassword) {
++      // Selecting an open network is sufficient consent to remember its SSID;
++      // there is no secret to confirm before persisting the credential.
++      RenderLock lock(*this);
++      if (!WIFI_STORE.addCredential(selectedSSID, ""))
++        LOG_ERR("WIFI", "Could not save open network: %s", selectedSSID.c_str());
+     } else {
+-      // Using saved password or open network - complete immediately
+-      LOG_DBG("WIFI",
+-              "Connected with saved/open credentials, "
+-              "completing immediately");
+-      onComplete(true);
++      LOG_DBG("WIFI", "Connected with saved credentials, completing immediately");
+     }
++    onComplete(true);
+     return;
+   }
+
+@@ -760,6 +802,10 @@ std::string WifiSelectionActivity::getSignalStrengthIndicator(const int32_t rssi
  }
 
  void WifiSelectionActivity::render(RenderLock&&) {
@@ -8704,7 +8752,7 @@ index 00000000..4c4fb444
 +}
 diff --git a/tools/render_sugartv_preview.py b/tools/render_sugartv_preview.py
 new file mode 100644
-index 00000000..4a3b8805
+index 00000000..fd5215da
 --- /dev/null
 +++ b/tools/render_sugartv_preview.py
 @@ -0,0 +1,191 @@
@@ -8834,7 +8882,7 @@ index 00000000..4a3b8805
 +        ("Aging + dim enabled", FrameOptions(age_tier="aging", dim_by_age=True, show_age_states=True)),
 +        ("Aging + dim disabled", FrameOptions(age_tier="aging", dim_by_age=False)),
 +        ("Stale + states enabled", FrameOptions(age_tier="stale", show_age_states=True)),
-+        ("Relative time", FrameOptions(time="3 min. ago")),
++        ("Relative time", FrameOptions(time="3 min ago")),
 +        ("Update failed", FrameOptions(update_failed=True)),
 +    ]
 +    scale = 0.5

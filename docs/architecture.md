@@ -41,7 +41,9 @@ Headless Wi-Fi reconnect first tries the last successful saved network. An
 early cold-radio failure falls back to a fresh scan of visible saved networks;
 the original network receives one additional attempt only when that scan
 confirms it is reachable. The explicit one-shot retry state keeps the workflow
-bounded across unavailable or changing networks.
+bounded across unavailable or changing networks. Manual selection automatically
+stores an open network as an empty-password credential; otherwise the headless
+path would see its SSID but have no saved network it is allowed to join.
 
 An RTC marker records that SugarTV owns the next scheduled wake. A short
 power-button press wakes the X3, runs an immediate SugarTV update, and re-arms
@@ -95,7 +97,7 @@ The pending-delta clock is rasterized from the versioned
 approximated with arcs. A golden SHA-256 locks the default frame, while explicit
 pixel assertions lock the clock's continuous right edge and broken left edge.
 
-The dedicated-device default shows reading age (`now`, `3 min. ago`) instead
+The dedicated-device default shows reading age (`now`, `3 min ago`) instead
 of absolute measurement time; `relative_time: false` restores the clock form.
 Normal readings are black on white. Low and high readings add a border. Urgent
 low and urgent high readings invert the frame. When age-state visualization is
