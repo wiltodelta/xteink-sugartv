@@ -38,6 +38,20 @@ time of the successful cycle; on failure it changes to `Update failed` with the
 absolute local time of the failed attempt. The next timer wake retries the
 normal data path. With no cached success, the main value is `N/A`.
 
+Each automatic cycle appends a credential-free JSON object to
+`/.crosspoint/logs/sugartv-YYYY-MM-DD.jsonl` on the SD card. The event records
+the outcome and stage together with timing, fresh or cached glucose value,
+unit, trend, delta, reading timestamps, cache-write result, battery, network
+state, saved-network count, wake/reset cause, and free heap. It also records the
+firmware version, clock and storage state, SSID/BSSID, channel, local network
+addressing, heap diagnostics, and the standard system-log tail. The tail
+captures requested URLs and concrete HTTP, JSON, SD, Wi-Fi, and rendering
+errors, but excludes the Home Assistant token, Wi-Fi password, and response
+payload. Daily files use the configured local timezone. Creation of a new daily
+file removes only matching SugarTV log files older than the 30-day retention
+window; unrelated files are never part of the cleanup set. Append-only JSONL
+makes earlier events survive a partial final write if power is lost.
+
 Headless Wi-Fi reconnect first tries the last successful saved network. An
 early cold-radio failure falls back to a fresh scan of visible saved networks;
 the original network receives one additional attempt only when that scan
@@ -45,6 +59,8 @@ confirms it is reachable. The explicit one-shot retry state keeps the workflow
 bounded across unavailable or changing networks. Manual selection automatically
 stores an open network as an empty-password credential; otherwise the headless
 path would see its SSID but have no saved network it is allowed to join.
+The credential store is loaded immediately after SD-card initialization so all
+UI and API consumers observe the persisted list before any Wi-Fi activity runs.
 
 An RTC marker records that SugarTV owns the next scheduled wake. A short
 power-button press wakes the X3, runs an immediate SugarTV update, and re-arms

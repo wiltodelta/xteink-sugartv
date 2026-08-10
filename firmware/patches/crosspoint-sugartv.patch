@@ -6331,7 +6331,7 @@ new file mode 100644
 index 00000000..7fd33744
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.cpp
-@@ -0,0 +1,761 @@
+@@ -0,0 +1,888 @@
 +#include "SugarTvActivity.h"
 +
 +#include <ArduinoJson.h>
@@ -6340,6 +6340,7 @@ index 00000000..7fd33744
 +#include <HalPowerManager.h>
 +#include <HalStorage.h>
 +#include <Logging.h>
++#include <WiFi.h>
 +#include <builtinFonts/sugartv_battery_8.h>
 +#include <builtinFonts/sugartv_delta_34.h>
 +#include <builtinFonts/sugartv_prediction_14.h>
@@ -6350,13 +6351,18 @@ index 00000000..7fd33744
 +#include <cctype>
 +#include <cmath>
 +#include <ctime>
++#include <limits>
 +#include <string>
 +#include <utility>
 +#include <vector>
 +
++#include <esp_sleep.h>
++#include <esp_system.h>
++
 +#include "activities/network/SugarTvFrameRenderer.h"
 +#include "activities/network/WifiSelectionActivity.h"
 +#include "activities/network/SugarTvLogic.h"
++#include "WifiCredentialStore.h"
 +#include "fontIds.h"
 +#include "network/HttpDownloader.h"
 +
@@ -6372,15 +6378,27 @@ index 00000000..7fd33744
 +
 +namespace {
 +constexpr uint64_t REFRESH_SECONDS = 60;
++constexpr time_t VALID_CLOCK_AFTER = 1700000000;
 +constexpr char SUGARTV_DIRECTORY[] = "/.crosspoint";
 +constexpr char ENTITY_CACHE_PATH[] = "/.crosspoint/sugartv-entity.txt";
 +constexpr char READING_CACHE_PATH[] = "/.crosspoint/sugartv-reading.json";
 +constexpr char SETTINGS_PATH[] = "/.crosspoint/sugartv.json";
++constexpr char EVENT_LOG_DIRECTORY[] = "/.crosspoint/logs";
++constexpr size_t EVENT_LOG_RETENTION_DAYS = 30;
 +constexpr size_t MAX_ENTITY_ID_LENGTH = 159;
 +constexpr size_t MAX_STATE_OBJECT_SIZE = 8192;
 +constexpr size_t MAX_SETTINGS_SIZE = 2048;
 +enum class StateReadResult { Ok, Unavailable, RequestFailed };
++bool hasValidClock(const time_t value) { return value >= VALID_CLOCK_AFTER; }
++void configureTimezone() {
++  static bool configured = false;
++  if (configured) return;
++  setenv("TZ", SUGARTV_TZ, 1);
++  tzset();
++  configured = true;
++}
 +using sugartv::AgeTier;
++using sugartv::CycleResult;
 +using sugartv::GlucoseZone;
 +using sugartv::GlucoseThresholds;
 +using sugartv::Trend;
@@ -6878,7 +6896,7 @@ index 00000000..7fd33744
 +};
 +
 +void formatAttemptTime(const time_t value, char* text, const size_t size) {
-+  if (value < 1700000000) {
++  if (!hasValidClock(value)) {
 +    strlcpy(text, "N/A", size);
 +    return;
 +  }
@@ -6892,7 +6910,7 @@ index 00000000..7fd33744
 +}
 +
 +void formatUpdatedTime(const time_t value, char* text, const size_t size) {
-+  if (value < 1700000000) {
++  if (!hasValidClock(value)) {
 +    strlcpy(text, "Never updated", size);
 +    return;
 +  }
@@ -6901,10 +6919,97 @@ index 00000000..7fd33744
 +  snprintf(text, size, "Updated at %s", timestamp);
 +}
 +
++std::string eventLogFilenameAt(const time_t eventAt) {
++  struct tm local = {};
++  localtime_r(&eventAt, &local);
++  return sugartv::eventLogFilename(local.tm_year + 1900, local.tm_mon + 1, local.tm_mday);
++}
++
++std::string eventLogPath(const time_t eventAt) {
++  return std::string(EVENT_LOG_DIRECTORY) + "/" + eventLogFilenameAt(eventAt);
++}
++
++void pruneExpiredEventLogs(const time_t eventAt) {
++  if (!hasValidClock(eventAt)) return;
++  const time_t cutoffAt = sugartv::eventLogCutoff(eventAt, EVENT_LOG_RETENTION_DAYS);
++  const std::string cutoffFilename = eventLogFilenameAt(cutoffAt);
++  for (const String& candidate :
++       Storage.listFiles(EVENT_LOG_DIRECTORY, std::numeric_limits<int>::max())) {
++    const std::string filename = candidate.c_str();
++    if (!sugartv::isExpiredEventLogFilename(filename, cutoffFilename)) continue;
++    const std::string path = std::string(EVENT_LOG_DIRECTORY) + "/" + filename;
++    if (!Storage.remove(path.c_str())) LOG_ERR("SUGARTV", "Could not remove expired event log %s", path.c_str());
++  }
++}
++
++void appendCycleEvent(const CycleResult result, const time_t attemptedAt, const Reading& reading,
++                      const bool readingCacheSaved, const uint16_t batteryPercentage, const uint32_t durationMs) {
++  configureTimezone();
++  if (!Storage.ensureDirectoryExists(EVENT_LOG_DIRECTORY)) {
++    LOG_ERR("SUGARTV", "Could not create event log directory");
++    return;
++  }
++  const std::string path = eventLogPath(attemptedAt);
++  const bool newDailyFile = !Storage.exists(path.c_str());
++  JsonDocument event;
++  event["schema_version"] = 1;
++  event["firmware_version"] = CROSSPOINT_VERSION;
++  event["timestamp"] = static_cast<int64_t>(attemptedAt);
++  event["clock_valid"] = hasValidClock(attemptedAt);
++  event["uptime_ms"] = millis();
++  const sugartv::CycleResultDescription resultDescription = sugartv::describeCycleResult(result);
++  event["result"] = resultDescription.result;
++  event["stage"] = resultDescription.stage;
++  event["duration_ms"] = durationMs;
++  event["measured_at"] = static_cast<int64_t>(reading.measuredAt);
++  event["last_success_at"] = static_cast<int64_t>(reading.updatedAt);
++  event["reading_source"] = result == CycleResult::Ok ? "fresh" : reading.valid ? "cached" : "none";
++  event["reading_valid"] = reading.valid;
++  if (reading.valid) {
++    event["glucose_value"] = reading.value;
++    event["glucose_unit"] = reading.mmol ? "mmol/L" : "mg/dL";
++    event["trend"] = sugartv::trendName(reading.trend);
++    event["has_delta"] = reading.hasDelta;
++    if (reading.hasDelta) event["delta"] = reading.delta;
++  }
++  if (result == CycleResult::Ok) event["reading_cache_saved"] = readingCacheSaved;
++  event["battery_percentage"] = batteryPercentage;
++  event["storage_ready"] = Storage.ready();
++  const bool wifiConnected = WiFi.isConnected();
++  event["wifi_connected"] = wifiConnected;
++  event["wifi_saved_networks"] = WIFI_STORE.getCredentialCount();
++  event["wifi_status"] = static_cast<int>(WiFi.status());
++  if (wifiConnected) {
++    event["wifi_ssid"] = WiFi.SSID();
++    event["wifi_bssid"] = WiFi.BSSIDstr();
++    event["wifi_channel"] = WiFi.channel();
++    event["wifi_rssi_dbm"] = WiFi.RSSI();
++    event["local_ip"] = WiFi.localIP().toString();
++    event["gateway_ip"] = WiFi.gatewayIP().toString();
++    event["dns_ip"] = WiFi.dnsIP().toString();
++  }
++  event["wake_cause"] = static_cast<int>(esp_sleep_get_wakeup_cause());
++  event["reset_reason"] = static_cast<int>(esp_reset_reason());
++  event["free_heap_bytes"] = ESP.getFreeHeap();
++  event["min_free_heap_bytes"] = ESP.getMinFreeHeap();
++  event["largest_free_block_bytes"] = ESP.getMaxAllocHeap();
++  event["log_tail"] = getLastLogs();
++  String line;
++  serializeJson(event, line);
++  line += '\n';
++  HalFile file = Storage.open(path.c_str(), O_WRITE | O_CREAT | O_APPEND);
++  const size_t written = file.write(line.c_str(), line.length());
++  file.close();
++  if (written != line.length()) {
++    LOG_ERR("SUGARTV", "Could not append cycle event to %s", path.c_str());
++    return;
++  }
++  if (newDailyFile) pruneExpiredEventLogs(attemptedAt);
++}
++
 +void renderReading(GfxRenderer& renderer, const CardConfig& config, const Reading& reading, const bool updateFailed,
 +                   const time_t attemptedAt) {
-+  setenv("TZ", SUGARTV_TZ, 1);
-+  tzset();
++  configureTimezone();
 +  const time_t displayTime = updateFailed && reading.updatedAt != 0 ? reading.updatedAt : attemptedAt;
 +  char timeText[32] = "00:00";
 +  if (config.relativeTime) {
@@ -6996,12 +7101,13 @@ index 00000000..7fd33744
 +  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 +}
 +
-+void renderFailedUpdate(GfxRenderer& renderer, const time_t attemptedAt) {
++Reading renderFailedUpdate(GfxRenderer& renderer, const time_t attemptedAt) {
 +  CardConfig config;
 +  loadSettings(config);
 +  Reading reading;
 +  loadCachedReadingOrFallback(reading);
 +  renderReading(renderer, config, reading, true, attemptedAt);
++  return reading;
 +}
 +}  // namespace
 +
@@ -7017,8 +7123,14 @@ index 00000000..7fd33744
 +                         [this](const ActivityResult& result) {
 +                           if (result.isCancelled) {
 +                             if (silent) {
-+                               RenderLock lock(*this);
-+                               renderFailedUpdate(renderer, time(nullptr));
++                               const time_t attemptedAt = time(nullptr);
++                               Reading reading;
++                               {
++                                 RenderLock lock(*this);
++                                 reading = renderFailedUpdate(renderer, attemptedAt);
++                               }
++                               appendCycleEvent(CycleResult::WifiFailed, attemptedAt, reading, false,
++                                                powerManager.getBatteryPercentage(), millis() - cycleStartedAtMs);
 +                               enterSugarTvSleep(REFRESH_SECONDS);
 +                             } else {
 +                               onGoHome();
@@ -7048,12 +7160,13 @@ index 00000000..7fd33744
 +}
 +
 +void SugarTvActivity::downloadAndDisplay() {
-+  if (time(nullptr) < 1700000000) halClock.syncFromNTP();
++  if (!hasValidClock(time(nullptr))) halClock.syncFromNTP();
 +  CardConfig config;
 +  loadSettings(config);
 +  Reading reading;
 +  StateReadResult stateResult = StateReadResult::RequestFailed;
-+  if (loadGlucoseEntity(config)) {
++  const bool entityResolved = loadGlucoseEntity(config);
++  if (entityResolved) {
 +    stateResult = readCurrentState(config, reading);
 +    if (stateResult == StateReadResult::RequestFailed) {
 +      std::string rediscoveredEntity;
@@ -7064,16 +7177,28 @@ index 00000000..7fd33744
 +    }
 +  }
 +  const bool stateOk = stateResult == StateReadResult::Ok;
++  CycleResult cycleResult = CycleResult::SensorMissing;
++  if (entityResolved) {
++    if (stateOk)
++      cycleResult = CycleResult::Ok;
++    else if (stateResult == StateReadResult::Unavailable)
++      cycleResult = CycleResult::SensorUnavailable;
++    else
++      cycleResult = CycleResult::HomeAssistantFailed;
++  }
 +  if (stateOk) readHistory(config, reading);
 +  if (stateResult == StateReadResult::Unavailable)
 +    LOG_INF("SUGARTV", "Glucose reading is unavailable; keeping sensor %s", config.glucoseEntity.c_str());
 +  else if (!stateOk)
 +    LOG_ERR("SUGARTV", "Home Assistant reading failed");
 +  const time_t attemptedAt = time(nullptr);
++  const uint16_t batteryPercentage = powerManager.getBatteryPercentage();
++  bool readingCacheSaved = false;
 +  if (stateOk) {
 +    reading.updatedAt = attemptedAt;
-+    reading.batteryPercentage = powerManager.getBatteryPercentage();
-+    if (!saveCachedReading(reading)) LOG_ERR("SUGARTV", "Could not cache the latest reading");
++    reading.batteryPercentage = batteryPercentage;
++    readingCacheSaved = saveCachedReading(reading);
++    if (!readingCacheSaved) LOG_ERR("SUGARTV", "Could not cache the latest reading");
 +  } else {
 +    loadCachedReadingOrFallback(reading);
 +  }
@@ -7081,6 +7206,8 @@ index 00000000..7fd33744
 +    RenderLock lock(*this);
 +    renderReading(renderer, config, reading, !stateOk, attemptedAt);
 +  }
++  appendCycleEvent(cycleResult, attemptedAt, reading, readingCacheSaved, batteryPercentage,
++                   millis() - cycleStartedAtMs);
 +  const uint64_t elapsedSeconds = (millis() - cycleStartedAtMs + 999) / 1000;
 +  enterSugarTvSleep(elapsedSeconds < REFRESH_SECONDS ? REFRESH_SECONDS - elapsedSeconds : 1);
 +}
@@ -7825,7 +7952,7 @@ new file mode 100644
 index 00000000..cfefc54a
 --- /dev/null
 +++ b/src/activities/network/SugarTvLogic.cpp
-@@ -0,0 +1,175 @@
+@@ -0,0 +1,221 @@
 +#include "SugarTvLogic.h"
 +
 +#include <algorithm>
@@ -8000,15 +8127,62 @@ index 00000000..cfefc54a
 +  return GlucoseZone::Target;
 +}
 +
++CycleResultDescription describeCycleResult(const CycleResult result) {
++  switch (result) {
++    case CycleResult::Ok: return {"ok", "complete"};
++    case CycleResult::WifiFailed: return {"wifi_failed", "wifi"};
++    case CycleResult::SensorMissing: return {"sensor_missing", "sensor"};
++    case CycleResult::SensorUnavailable: return {"sensor_unavailable", "sensor"};
++    case CycleResult::HomeAssistantFailed: return {"home_assistant_failed", "home_assistant"};
++  }
++  return {"unknown", "unknown"};
++}
++
++const char* trendName(const Trend trend) {
++  switch (trend) {
++    case Trend::RisingQuickly: return "rising_quickly";
++    case Trend::Rising: return "rising";
++    case Trend::RisingSlightly: return "rising_slightly";
++    case Trend::Steady: return "steady";
++    case Trend::FallingSlightly: return "falling_slightly";
++    case Trend::Falling: return "falling";
++    case Trend::FallingQuickly: return "falling_quickly";
++    case Trend::Unknown: return "unknown";
++  }
++  return "unknown";
++}
++
++std::string eventLogFilename(const int year, const int month, const int day) {
++  char filename[25];
++  snprintf(filename, sizeof(filename), "sugartv-%04d-%02d-%02d.jsonl", year, month, day);
++  return filename;
++}
++
++time_t eventLogCutoff(const time_t eventAt, const size_t retentionDays) {
++  if (retentionDays < 2) return eventAt;
++  return eventAt - static_cast<time_t>(retentionDays - 1) * 24 * 60 * 60;
++}
++
++bool isExpiredEventLogFilename(const std::string& filename, const std::string& cutoffFilename) {
++  if (filename.size() != 24 || filename.rfind("sugartv-", 0) != 0 || filename.compare(18, 6, ".jsonl") != 0)
++    return false;
++  static constexpr size_t DIGIT_POSITIONS[] = {8, 9, 10, 11, 13, 14, 16, 17};
++  if (filename[12] != '-' || filename[15] != '-') return false;
++  for (const size_t position : DIGIT_POSITIONS)
++    if (!std::isdigit(static_cast<unsigned char>(filename[position]))) return false;
++  return filename < cutoffFilename;
++}
++
 +}  // namespace sugartv
 diff --git a/src/activities/network/SugarTvLogic.h b/src/activities/network/SugarTvLogic.h
 new file mode 100644
 index 00000000..d57d0111
 --- /dev/null
 +++ b/src/activities/network/SugarTvLogic.h
-@@ -0,0 +1,38 @@
+@@ -0,0 +1,49 @@
 +#pragma once
 +
++#include <cstddef>
 +#include <ctime>
 +#include <string>
 +#include <vector>
@@ -8028,6 +8202,11 @@ index 00000000..d57d0111
 +
 +enum class AgeTier { Current, Aging, Stale };
 +enum class GlucoseZone { Target, Warning, Urgent };
++enum class CycleResult { Ok, WifiFailed, SensorMissing, SensorUnavailable, HomeAssistantFailed };
++struct CycleResultDescription {
++  const char* result;
++  const char* stage;
++};
 +
 +struct GlucoseThresholds {
 +  float urgentLow;
@@ -8043,6 +8222,11 @@ index 00000000..d57d0111
 +AgeTier ageTier(time_t measuredAt, float cadenceSeconds, time_t now);
 +GlucoseThresholds thresholdsForUnit(bool mmol, const GlucoseThresholds& overrides);
 +GlucoseZone glucoseZone(float value, float urgentLow, float low, float high, float urgentHigh, bool enabled);
++CycleResultDescription describeCycleResult(CycleResult result);
++const char* trendName(Trend trend);
++std::string eventLogFilename(int year, int month, int day);
++time_t eventLogCutoff(time_t eventAt, size_t retentionDays);
++bool isExpiredEventLogFilename(const std::string& filename, const std::string& cutoffFilename);
 +
 +}  // namespace sugartv
 diff --git a/src/activities/network/WifiSelectionActivity.cpp b/src/activities/network/WifiSelectionActivity.cpp
@@ -8263,6 +8447,15 @@ index e9d4107b..5230706d 100644
  #include <SPI.h>
  #include <WiFi.h>
  #include <builtinFonts/all.h>
+@@ -25,7 +26,8 @@
+ #include "MappedInputManager.h"
+ #include "OpdsServerStore.h"
+ #include "RecentBooksStore.h"
+ #include "SdCardFontSystem.h"
++#include "WifiCredentialStore.h"
+ #include "activities/Activity.h"
+ #include "activities/ActivityManager.h"
+ #include "activities/settings/SdFirmwareUpdateActivity.h"
 @@ -42,6 +43,20 @@ FontDecompressor fontDecompressor;
  SdCardFontSystem sdFontSystem;
  FontCacheManager fontCacheManager(renderer.getFontMap(), renderer.getSdCardFonts());
@@ -8292,7 +8485,15 @@ index e9d4107b..5230706d 100644
    // Discover and load SD card fonts
    sdFontSystem.begin(renderer);
 
-@@ -316,12 +330,21 @@ void setup() {
+@@ -309,6 +324,7 @@ void setup() {
+   SETTINGS.loadFromFile();
+   APP_STATE.loadFromFile();
+   RECENT_BOOKS.loadFromFile();
++  WIFI_STORE.loadFromFile();
+   I18N.setLanguage(static_cast<Language>(SETTINGS.language));
+   KOREADER_STORE.loadFromFile();
+   OPDS_STORE.loadFromFile();
+@@ -316,12 +331,21 @@ void setup() {
    ButtonNavigator::setMappedInputManager(mappedInputManager);
 
    const auto wakeupReason = gpio.getWakeupReason();
@@ -8315,7 +8516,7 @@ index e9d4107b..5230706d 100644
        }
        break;
      case HalGPIO::WakeupReason::AfterUSBPower:
-@@ -365,50 +388,56 @@ void setup() {
+@@ -365,50 +389,56 @@ void setup() {
    const BootResume resume = isSilentReboot              ? BootResume::Silent
                              : !APP_STATE.showBootScreen ? BootResume::QuickResume
                                                          : BootResume::Splash;
@@ -9057,7 +9258,7 @@ new file mode 100644
 index 00000000..01297936
 --- /dev/null
 +++ b/tools/test_sugartv_logic.cpp
-@@ -0,0 +1,84 @@
+@@ -0,0 +1,113 @@
 +#include <cassert>
 +#include <cmath>
 +#include <ctime>
@@ -9066,6 +9267,7 @@ index 00000000..01297936
 +#include "activities/network/SugarTvLogic.h"
 +
 +using sugartv::AgeTier;
++using sugartv::CycleResult;
 +using sugartv::GlucoseZone;
 +using sugartv::GlucoseThresholds;
 +using sugartv::Trend;
@@ -9141,6 +9343,34 @@ index 00000000..01297936
 +  assert(sugartv::glucoseZone(250, 54, 70, 180, 250, true) == GlucoseZone::Warning);
 +  assert(sugartv::glucoseZone(251, 54, 70, 180, 250, true) == GlucoseZone::Urgent);
 +  assert(sugartv::glucoseZone(300, 54, 70, 180, 250, false) == GlucoseZone::Target);
++
++  const sugartv::CycleResultDescription okResult = sugartv::describeCycleResult(CycleResult::Ok);
++  assert(std::string(okResult.result) == "ok" && std::string(okResult.stage) == "complete");
++  const sugartv::CycleResultDescription wifiResult = sugartv::describeCycleResult(CycleResult::WifiFailed);
++  assert(std::string(wifiResult.result) == "wifi_failed" && std::string(wifiResult.stage) == "wifi");
++  const sugartv::CycleResultDescription unavailableResult =
++      sugartv::describeCycleResult(CycleResult::SensorUnavailable);
++  assert(std::string(unavailableResult.result) == "sensor_unavailable" &&
++         std::string(unavailableResult.stage) == "sensor");
++  const sugartv::CycleResultDescription homeAssistantResult =
++      sugartv::describeCycleResult(CycleResult::HomeAssistantFailed);
++  assert(std::string(homeAssistantResult.result) == "home_assistant_failed" &&
++         std::string(homeAssistantResult.stage) == "home_assistant");
++  assert(std::string(sugartv::trendName(Trend::RisingQuickly)) == "rising_quickly");
++  assert(std::string(sugartv::trendName(Trend::Steady)) == "steady");
++  assert(std::string(sugartv::trendName(Trend::Unknown)) == "unknown");
++
++  assert(sugartv::eventLogFilename(2026, 8, 9) == "sugartv-2026-08-09.jsonl");
++  assert(sugartv::eventLogFilename(2026, 12, 31) == "sugartv-2026-12-31.jsonl");
++  constexpr time_t day = 24 * 60 * 60;
++  assert(sugartv::eventLogCutoff(100 * day, 30) == 71 * day);
++  assert(sugartv::eventLogCutoff(100 * day, 1) == 100 * day);
++  const std::string cutoff = "sugartv-2026-07-12.jsonl";
++  assert(sugartv::isExpiredEventLogFilename("sugartv-2026-07-11.jsonl", cutoff));
++  assert(!sugartv::isExpiredEventLogFilename("sugartv-2026-07-12.jsonl", cutoff));
++  assert(!sugartv::isExpiredEventLogFilename("sugartv-2026-08-09.jsonl", cutoff));
++  assert(!sugartv::isExpiredEventLogFilename("other-2026-07-01.jsonl", cutoff));
++  assert(!sugartv::isExpiredEventLogFilename("sugartv-invalid.jsonl", cutoff));
 +}
 diff --git a/tools/test_sugartv_preview.py b/tools/test_sugartv_preview.py
 new file mode 100644

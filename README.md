@@ -75,12 +75,22 @@ that status with `Update failed` and the failed attempt time on the same line,
 then retries on the next one-minute wake. If no successful reading has been
 cached, the main value is `N/A`.
 
+Every automatic cycle appends a diagnostic JSON object to the daily SD-card log
+at `/.crosspoint/logs/sugartv-YYYY-MM-DD.jsonl`. It retains 30 days of cycle,
+reading, network, system, and error context without tokens, Wi-Fi passwords, or
+response payloads. See [Architecture](docs/architecture.md) for the complete
+logging contract.
+
 On a cold wake, SugarTV first tries the last successful saved Wi-Fi network. If
 the radio rejects that early attempt, a fresh scan tries visible saved networks
 and permits one scan-confirmed retry of the original network. The attempt set
 remains bounded, so an unavailable network cannot trap the device awake. A
 manually selected open network is saved automatically with an empty password so
 later headless wakes can reconnect to it.
+
+The saved-network store is loaded immediately after SD-card initialization, so
+the device UI and API do not temporarily report an empty list before the first
+Wi-Fi activity opens it.
 
 An optional `/.crosspoint/sugartv.json` file overrides discovery and display
 defaults. The shared fields use the same names as `homeassistant-sugartv-card`:
@@ -132,8 +142,9 @@ python3 tools/render_sugartv_preview.py \
   --output /tmp/sugartv-feature-matrix.png --matrix
 ```
 
-The C++ test exercises the same timestamp, trend, sibling-entity, cadence, and
-aging code compiled into the firmware. The preview is not a second Python
+The C++ test exercises the same timestamp, trend, sibling-entity, cadence,
+aging, event-result, filename, and retention code compiled into the firmware.
+The preview is not a second Python
 implementation: it compiles and executes the same C++ frame renderer, bitmap
 fonts, layout, and icon assets as the X3. Its tests reject clipped pixels, lock
 the default framebuffer with a golden digest, and cover prediction placement,
