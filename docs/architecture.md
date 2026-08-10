@@ -32,10 +32,11 @@ Each successful cycle stores the small normalized reading record and its fetch
 time in `/.crosspoint/sugartv-reading.json`. If Wi-Fi connection, Home Assistant
 access, or the selected sensor fails on a later cycle, the renderer uses that
 record instead of silently retaining an apparently current frame. The cached
-value, trend, delta, displayed age, and battery percentage are frozen; only an
-upper-left `Update failed` status and the local date and time of the failed
-attempt are added. The next timer wake retries the normal data path. With no
-cached success, the main value is `N/A`.
+value, trend, delta, displayed age, and battery percentage are frozen. The
+upper-left single-line status normally reads `Updated` with the absolute local
+time of the successful cycle; on failure it changes to `Update failed` with the
+absolute local time of the failed attempt. The next timer wake retries the
+normal data path. With no cached success, the main value is `N/A`.
 
 Headless Wi-Fi reconnect first tries the last successful saved network. An
 early cold-radio failure falls back to a fresh scan of visible saved networks;

@@ -6331,7 +6331,7 @@ new file mode 100644
 index 00000000..7fd33744
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.cpp
-@@ -0,0 +1,748 @@
+@@ -0,0 +1,761 @@
 +#include "SugarTvActivity.h"
 +
 +#include <ArduinoJson.h>
@@ -6891,6 +6891,16 @@ index 00000000..7fd33744
 +           local.tm_hour < 12 ? "AM" : "PM");
 +}
 +
++void formatUpdatedTime(const time_t value, char* text, const size_t size) {
++  if (value < 1700000000) {
++    strlcpy(text, "Never updated", size);
++    return;
++  }
++  char timestamp[24];
++  formatAttemptTime(value, timestamp, sizeof(timestamp));
++  snprintf(text, size, "Updated at %s", timestamp);
++}
++
 +void renderReading(GfxRenderer& renderer, const CardConfig& config, const Reading& reading, const bool updateFailed,
 +                   const time_t attemptedAt) {
 +  setenv("TZ", SUGARTV_TZ, 1);
@@ -6952,11 +6962,13 @@ index 00000000..7fd33744
 +                                 : GlucoseZone::Target;
 +  char batteryText[5];
 +  snprintf(batteryText, sizeof(batteryText), "%u%%", static_cast<unsigned>(reading.batteryPercentage));
-+  char attemptText[24];
-+  const char* failureAttemptText = nullptr;
++  char statusText[48];
 +  if (updateFailed) {
++    char attemptText[24];
 +    formatAttemptTime(attemptedAt, attemptText, sizeof(attemptText));
-+    failureAttemptText = attemptText;
++    snprintf(statusText, sizeof(statusText), "Update failed at %s", attemptText);
++  } else {
++    formatUpdatedTime(reading.updatedAt, statusText, sizeof(statusText));
 +  }
 +  const char* prediction = config.showPrediction ? predictionText(config, reading) : "";
 +  DeviceFrameCanvas canvas(renderer);
@@ -6967,7 +6979,8 @@ index 00000000..7fd33744
 +                                     delta,
 +                                     prediction,
 +                                     batteryText,
-+                                     failureAttemptText,
++                                     statusText,
++                                     updateFailed,
 +                                     reading.trend,
 +                                     zone,
 +                                     ageTier(reading.measuredAt, reading.cadenceSeconds, displayTime),
@@ -7115,7 +7128,7 @@ new file mode 100644
 index 00000000..b6b078c0
 --- /dev/null
 +++ b/src/activities/network/SugarTvFrameRenderer.cpp
-@@ -0,0 +1,297 @@
+@@ -0,0 +1,293 @@
 +#include "SugarTvFrameRenderer.h"
 +
 +#include "SugarTvIcons.h"
@@ -7400,15 +7413,11 @@ index 00000000..b6b078c0
 +  const int badgeX = FRAME_WIDTH - 16 - badgeWidth;
 +  painter.fillRect(badgeX, 16, badgeWidth, badgeHeight, false);
 +  drawText(painter, *fonts.battery, badgeX + 8, 20, content.batteryText, true);
-+  if (content.attemptText) {
-+    constexpr char failureText[] = "Update failed";
-+    const int failureWidth = std::max(textWidth(*fonts.battery, failureText), textWidth(*fonts.battery, content.attemptText));
-+    const int failureBadgeWidth = failureWidth + 16;
-+    const int failureBadgeHeight = fonts.battery->advanceY * 2 + 8;
-+    painter.fillRect(16, 16, failureBadgeWidth, failureBadgeHeight, false);
-+    drawText(painter, *fonts.battery, 24, 20, failureText, true);
-+    drawText(painter, *fonts.battery, 24, 20 + fonts.battery->advanceY, content.attemptText, true);
++  if (content.updateFailed) {
++    const int statusWidth = textWidth(*fonts.battery, content.statusText);
++    painter.fillRect(16, 16, statusWidth + 16, badgeHeight, false);
 +  }
++  drawText(painter, *fonts.battery, 24, 20, content.statusText, content.updateFailed ? true : ink);
 +  return painter.stats;
 +}
 +
@@ -7418,7 +7427,7 @@ new file mode 100644
 index 00000000..420272df
 --- /dev/null
 +++ b/src/activities/network/SugarTvFrameRenderer.h
-@@ -0,0 +1,56 @@
+@@ -0,0 +1,57 @@
 +#pragma once
 +
 +#include <EpdFontData.h>
@@ -7446,7 +7455,8 @@ index 00000000..420272df
 +  const char* deltaText;
 +  const char* predictionText;
 +  const char* batteryText;
-+  const char* attemptText;
++  const char* statusText;
++  bool updateFailed;
 +  Trend trend;
 +  GlucoseZone zone;
 +  AgeTier ageTier;
@@ -8635,7 +8645,7 @@ new file mode 100644
 index 00000000..4c4fb444
 --- /dev/null
 +++ b/tools/render_sugartv_frame.cpp
-@@ -0,0 +1,114 @@
+@@ -0,0 +1,117 @@
 +#include <builtinFonts/sugartv_battery_8.h>
 +#include <builtinFonts/sugartv_delta_34.h>
 +#include <builtinFonts/sugartv_prediction_14.h>
@@ -8719,26 +8729,29 @@ index 00000000..4c4fb444
 +
 +int main(int argc, char** argv) {
 +  if (argc != 16) {
-+    std::cerr << "usage: render_sugartv_frame output.pbm time value delta-or-none battery trend zone age "
-+                 "relative show-age dim-age thresholds prediction update-failed attempt-time\n";
++    std::cerr << "usage: render_sugartv_frame output.pbm time value delta-or-none battery status-time trend zone age "
++                 "relative show-age dim-age thresholds prediction update-failed\n";
 +    return 64;
 +  }
 +  const std::string delta = argv[4];
++  const bool updateFailed = std::string(argv[15]) == "1";
++  const std::string status = std::string(updateFailed ? "Update failed at " : "Updated at ") + argv[6];
 +  const sugartv::FrameFonts fonts{&sugartv_value_108, &sugartv_delta_34, &sugartv_relative_18,
 +                                 &sugartv_prediction_14, &sugartv_battery_8};
 +  const sugartv::FrameContent content{argv[2],
 +                                     argv[3],
 +                                     delta == "none" ? nullptr : argv[4],
-+                                     argv[13],
++                                     argv[14],
 +                                     argv[5],
-+                                     std::string(argv[14]) == "1" ? argv[15] : nullptr,
-+                                     trendFrom(argv[6]),
-+                                     zoneFrom(argv[7]),
-+                                     ageFrom(argv[8]),
-+                                     std::string(argv[9]) == "1",
++                                     status.c_str(),
++                                     updateFailed,
++                                     trendFrom(argv[7]),
++                                     zoneFrom(argv[8]),
++                                     ageFrom(argv[9]),
 +                                     std::string(argv[10]) == "1",
 +                                     std::string(argv[11]) == "1",
-+                                     std::string(argv[12]) == "1"};
++                                     std::string(argv[12]) == "1",
++                                     std::string(argv[13]) == "1"};
 +  HostCanvas canvas;
 +  const sugartv::FrameStats stats = sugartv::renderFrame(canvas, fonts, content);
 +  if (stats.clippedPixels) {
@@ -8787,6 +8800,7 @@ index 00000000..fd5215da
 +    value: str = "116"
 +    delta: str | None = "+1"
 +    battery: str = "100%"
++    status_time: str = "Aug 9, 3:55 PM"
 +    trend: str = "steady"
 +    zone: str = "target"
 +    age_tier: str = "current"
@@ -8795,7 +8809,6 @@ index 00000000..fd5215da
 +    color_thresholds: bool = True
 +    prediction: str = ""
 +    update_failed: bool = False
-+    attempt_time: str = "Aug 9, 3:55 PM"
 +    value_point_size: int = 108
 +
 +
@@ -8837,6 +8850,7 @@ index 00000000..fd5215da
 +                options.value,
 +                options.delta if options.delta is not None else "none",
 +                options.battery,
++                options.status_time,
 +                options.trend,
 +                options.zone,
 +                options.age_tier,
@@ -8846,7 +8860,6 @@ index 00000000..fd5215da
 +                str(int(options.color_thresholds)),
 +                options.prediction,
 +                str(int(options.update_failed)),
-+                options.attempt_time,
 +            ],
 +            check=True,
 +            capture_output=True,
@@ -8912,6 +8925,7 @@ index 00000000..fd5215da
 +    parser.add_argument("--value", default="116")
 +    parser.add_argument("--delta", default="+1")
 +    parser.add_argument("--battery", default="100%")
++    parser.add_argument("--status-time", default="Aug 9, 3:55 PM")
 +    parser.add_argument("--trend", default="steady")
 +    parser.add_argument("--zone", default="target")
 +    parser.add_argument("--age-tier", default="current")
@@ -8920,7 +8934,6 @@ index 00000000..fd5215da
 +    parser.add_argument("--no-color-thresholds", action="store_true")
 +    parser.add_argument("--prediction", default="")
 +    parser.add_argument("--update-failed", action="store_true")
-+    parser.add_argument("--attempt-time", default="Aug 9, 3:55 PM")
 +    return parser.parse_args()
 +
 +
@@ -8931,6 +8944,7 @@ index 00000000..fd5215da
 +        value=args.value,
 +        delta=args.delta,
 +        battery=args.battery,
++        status_time=args.status_time,
 +        trend=args.trend,
 +        zone=args.zone,
 +        age_tier=args.age_tier,
@@ -8939,7 +8953,6 @@ index 00000000..fd5215da
 +        color_thresholds=not args.no_color_thresholds,
 +        prediction=args.prediction,
 +        update_failed=args.update_failed,
-+        attempt_time=args.attempt_time,
 +    )
 +    image = render_matrix(args.font) if args.matrix else render(args.font, options)
 +    image.save(args.output)
@@ -9134,7 +9147,7 @@ new file mode 100644
 index 00000000..da77592a
 --- /dev/null
 +++ b/tools/test_sugartv_preview.py
-@@ -0,0 +1,148 @@
+@@ -0,0 +1,147 @@
 +#!/usr/bin/env python3
 +"""Visual contract tests for the on-device SugarTV preview."""
 +
@@ -9186,7 +9199,7 @@ index 00000000..da77592a
 +        self.assertEqual(row_bands(frame), [(139, 192), (297, 462), (551, 630)])
 +        self.assertEqual(
 +            hashlib.sha256(frame.tobytes()).hexdigest(),
-+            "969b8235acdbd4c25038896ebb3694d2e5216c2aa98429e9f94eaea9378af186",
++            "d13d97ddff07762ce6a113fa42a5f8ab6ce0c2965cdb97cb54ad38a1b0bbc296",
 +        )
 +
 +    def test_prediction_moves_primary_content_up(self) -> None:
@@ -9252,15 +9265,14 @@ index 00000000..da77592a
 +            self.assertEqual(icon.convert("L").getextrema(), (0, 255))
 +        self.assertEqual(len({icon.tobytes() for icon in icons}), len(icons))
 +
-+    def test_failed_attempt_changes_only_the_upper_left_status(self) -> None:
++    def test_failed_attempt_replaces_the_single_line_status(self) -> None:
 +        current = render(FONT, FrameOptions())
 +        failed = render(FONT, FrameOptions(update_failed=True))
 +        difference = ImageChops.difference(current, failed).getbbox()
 +        self.assertIsNotNone(difference)
-+        self.assertEqual(difference[0], 24)
-+        self.assertLessEqual(difference[2], 250)
-+        self.assertLessEqual(difference[3], 100)
-+        self.assertEqual(current.crop((0, 100, 528, 792)).tobytes(), failed.crop((0, 100, 528, 792)).tobytes())
++        self.assertLessEqual(difference[2], 300)
++        self.assertLessEqual(difference[3], 50)
++        self.assertEqual(current.crop((0, 50, 528, 792)).tobytes(), failed.crop((0, 50, 528, 792)).tobytes())
 +
 +    def test_generated_fonts_cover_every_dynamic_character(self) -> None:
 +        value_header = (ROOT / "lib/EpdFont/builtinFonts/sugartv_value_108.h").read_text()

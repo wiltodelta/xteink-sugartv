@@ -16,11 +16,12 @@ history-derived delta and cadence, prediction text, threshold states, relative
 time, missing data, and cadence-based aging. Color semantics are translated to
 the one-bit panel: low and high readings gain an outline, urgent readings invert
 the frame, and stale readings use ordered ink density. The upper-right value is
-the battery percentage measured by the X3. If Wi-Fi, Home Assistant, or the
-configured glucose sensor is unavailable, the last successful reading remains
-visible without changing its value, trend, delta, displayed age, or battery
-percentage. Only an upper-left `Update failed` status and the local date and
-time of the failed attempt are added.
+the battery percentage measured by the X3. The upper-left status always shows
+the result and local time of the latest update attempt: `Updated at Aug 9, 3:55 PM`
+after success or `Update failed at Aug 9, 3:56 PM` after failure. If Wi-Fi, Home
+Assistant, or the configured glucose sensor is unavailable, the last successful
+reading remains visible without changing its value, trend, delta, displayed
+age, or battery percentage.
 
 This is an informational display, not a medical device or a source for
 treatment decisions.
@@ -67,10 +68,12 @@ entity request causes rediscovery. A temporarily `unknown` or `unavailable`
 reading does not discard the cached source.
 
 The latest successful reading is cached in
-`/.crosspoint/sugartv-reading.json`. A failed automatic cycle renders that
-cached reading exactly as it appeared on the last successful cycle, adds the
-failed attempt time in the upper left, then retries on the next one-minute wake.
-If no successful reading has been cached, the main value is `N/A`.
+`/.crosspoint/sugartv-reading.json`. A successful cycle shows its absolute local
+update time in the upper-left status. A failed automatic cycle renders the
+cached reading exactly as it appeared on the last successful cycle, replaces
+that status with `Update failed` and the failed attempt time on the same line,
+then retries on the next one-minute wake. If no successful reading has been
+cached, the main value is `N/A`.
 
 On a cold wake, SugarTV first tries the last successful saved Wi-Fi network. If
 the radio rejects that early attempt, a fresh scan tries visible saved networks
@@ -134,8 +137,8 @@ aging code compiled into the firmware. The preview is not a second Python
 implementation: it compiles and executes the same C++ frame renderer, bitmap
 fonts, layout, and icon assets as the X3. Its tests reject clipped pixels, lock
 the default framebuffer with a golden digest, and cover prediction placement,
-threshold states, age density, missing history, unknown trend, the failed-update
-badge, and the complete visual matrix. The final command above writes that
+threshold states, age density, missing history, unknown trend, the single-line
+update status, and the complete visual matrix. The final command above writes that
 matrix to `/tmp` for local inspection without adding generated device data to
 the repository.
 
