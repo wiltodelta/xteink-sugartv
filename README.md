@@ -78,8 +78,11 @@ cached, the main value is `N/A`.
 Every automatic cycle appends a diagnostic JSON object to the daily SD-card log
 at `/.crosspoint/logs/sugartv-YYYY-MM-DD.jsonl`. It retains 30 days of cycle,
 reading, network, system, and error context without tokens, Wi-Fi passwords, or
-response payloads. See [Architecture](docs/architecture.md) for the complete
-logging contract.
+response payloads. Schema version 2 also records the requested sleep interval
+and whether ESP-IDF accepted the timer wake source. The active cycle is marked
+by `/.crosspoint/sugartv-cycle-armed`, so a reset or USB power event resumes
+SugarTV instead of silently returning to the retained Home screen. See
+[Architecture](docs/architecture.md) for the complete logging contract.
 
 On a cold wake, SugarTV first tries the last successful saved Wi-Fi network. If
 the radio rejects that early attempt, a fresh scan tries visible saved networks
@@ -143,7 +146,8 @@ python3 tools/render_sugartv_preview.py \
 ```
 
 The C++ test exercises the same timestamp, trend, sibling-entity, cadence,
-aging, event-result, filename, and retention code compiled into the firmware.
+aging, event-result, cycle-resume, filename, and retention code compiled into
+the firmware.
 The preview is not a second Python
 implementation: it compiles and executes the same C++ frame renderer, bitmap
 fonts, layout, and icon assets as the X3. Its tests reject clipped pixels, lock

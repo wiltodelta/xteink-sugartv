@@ -20,7 +20,9 @@ the sleep interval; when a cycle itself exceeds 60 seconds, the next wake is
 scheduled one second later. SugarTV adds the timer wake source, then delegates
 the final transition to CrossPoint's `HalPowerManager::startDeepSleep()`. This
 keeps CrossPoint's serial teardown, power-rail shutdown, and power-button wake
-handling in the device's canonical sleep lifecycle.
+handling in the device's canonical sleep lifecycle. The timer-arm result is
+checked before sleep. If ESP-IDF rejects it, the cycle event records the
+failure and the device restarts instead of entering an unwakeable sleep.
 
 Timer wakes use a silent path. The retained e-ink frame stays visible while
 CrossPoint initializes and reconnects, so automatic updates do not show a boot
@@ -47,10 +49,13 @@ firmware version, clock and storage state, SSID/BSSID, channel, local network
 addressing, heap diagnostics, and the standard system-log tail. The tail
 captures requested URLs and concrete HTTP, JSON, SD, Wi-Fi, and rendering
 errors, but excludes the Home Assistant token, Wi-Fi password, and response
-payload. Daily files use the configured local timezone. Creation of a new daily
-file removes only matching SugarTV log files older than the 30-day retention
-window; unrelated files are never part of the cleanup set. Append-only JSONL
-makes earlier events survive a partial final write if power is lost.
+payload. Schema version 2 records `next_wake_in_seconds` and
+`timer_wake_armed`, so a missing next event can be distinguished from a timer
+that was never accepted. Daily files use the configured local timezone.
+Creation of a new daily file removes only matching SugarTV log files older than
+the 30-day retention window; unrelated files are never part of the cleanup
+set. Append-only JSONL makes earlier events survive a partial final write if
+power is lost.
 
 Headless Wi-Fi reconnect first tries the last successful saved network. An
 early cold-radio failure falls back to a fresh scan of visible saved networks;
@@ -62,10 +67,12 @@ path would see its SSID but have no saved network it is allowed to join.
 The credential store is loaded immediately after SD-card initialization so all
 UI and API consumers observe the persisted list before any Wi-Fi activity runs.
 
-An RTC marker records that SugarTV owns the next scheduled wake. A short
-power-button press wakes the X3, runs an immediate SugarTV update, and re-arms
-the next minute. A verified power-button hold clears the marker and returns to
-the normal CrossPoint UI.
+RTC memory and the durable `/.crosspoint/sugartv-cycle-armed` SD marker record
+that SugarTV owns the next scheduled wake. Either marker resumes SugarTV after
+a deep-sleep, software, USB, or other reset. A short power-button press wakes
+the X3, runs an immediate SugarTV update, and re-arms the next minute. A
+verified power-button hold clears both markers and returns to the normal
+CrossPoint UI.
 
 ## Home Assistant data flow
 

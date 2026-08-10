@@ -6328,10 +6328,10 @@ index 84bd62ec..80a91d51 100644
    int getMenuItemCount() const;
 diff --git a/src/activities/network/SugarTvActivity.cpp b/src/activities/network/SugarTvActivity.cpp
 new file mode 100644
-index 00000000..7fd33744
+index 00000000..0fee77c6
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.cpp
-@@ -0,0 +1,888 @@
+@@ -0,0 +1,896 @@
 +#include "SugarTvActivity.h"
 +
 +#include <ArduinoJson.h>
@@ -6943,7 +6943,8 @@ index 00000000..7fd33744
 +}
 +
 +void appendCycleEvent(const CycleResult result, const time_t attemptedAt, const Reading& reading,
-+                      const bool readingCacheSaved, const uint16_t batteryPercentage, const uint32_t durationMs) {
++                      const bool readingCacheSaved, const uint16_t batteryPercentage, const uint32_t durationMs,
++                      const uint64_t sleepSeconds, const bool timerWakeArmed) {
 +  configureTimezone();
 +  if (!Storage.ensureDirectoryExists(EVENT_LOG_DIRECTORY)) {
 +    LOG_ERR("SUGARTV", "Could not create event log directory");
@@ -6952,7 +6953,7 @@ index 00000000..7fd33744
 +  const std::string path = eventLogPath(attemptedAt);
 +  const bool newDailyFile = !Storage.exists(path.c_str());
 +  JsonDocument event;
-+  event["schema_version"] = 1;
++  event["schema_version"] = 2;
 +  event["firmware_version"] = CROSSPOINT_VERSION;
 +  event["timestamp"] = static_cast<int64_t>(attemptedAt);
 +  event["clock_valid"] = hasValidClock(attemptedAt);
@@ -6961,6 +6962,8 @@ index 00000000..7fd33744
 +  event["result"] = resultDescription.result;
 +  event["stage"] = resultDescription.stage;
 +  event["duration_ms"] = durationMs;
++  event["next_wake_in_seconds"] = sleepSeconds;
++  event["timer_wake_armed"] = timerWakeArmed;
 +  event["measured_at"] = static_cast<int64_t>(reading.measuredAt);
 +  event["last_success_at"] = static_cast<int64_t>(reading.updatedAt);
 +  event["reading_source"] = result == CycleResult::Ok ? "fresh" : reading.valid ? "cached" : "none";
@@ -7111,7 +7114,8 @@ index 00000000..7fd33744
 +}
 +}  // namespace
 +
-+extern void enterSugarTvSleep(uint64_t seconds);
++extern bool armSugarTvWake(uint64_t seconds);
++extern void enterSugarTvSleep(bool timerArmed);
 +
 +void SugarTvActivity::onEnter() {
 +  Activity::onEnter();
@@ -7129,9 +7133,11 @@ index 00000000..7fd33744
 +                                 RenderLock lock(*this);
 +                                 reading = renderFailedUpdate(renderer, attemptedAt);
 +                               }
++                               const bool timerWakeArmed = armSugarTvWake(REFRESH_SECONDS);
 +                               appendCycleEvent(CycleResult::WifiFailed, attemptedAt, reading, false,
-+                                                powerManager.getBatteryPercentage(), millis() - cycleStartedAtMs);
-+                               enterSugarTvSleep(REFRESH_SECONDS);
++                                                powerManager.getBatteryPercentage(), millis() - cycleStartedAtMs,
++                                                REFRESH_SECONDS, timerWakeArmed);
++                               enterSugarTvSleep(timerWakeArmed);
 +                             } else {
 +                               onGoHome();
 +                             }
@@ -7206,10 +7212,12 @@ index 00000000..7fd33744
 +    RenderLock lock(*this);
 +    renderReading(renderer, config, reading, !stateOk, attemptedAt);
 +  }
-+  appendCycleEvent(cycleResult, attemptedAt, reading, readingCacheSaved, batteryPercentage,
-+                   millis() - cycleStartedAtMs);
 +  const uint64_t elapsedSeconds = (millis() - cycleStartedAtMs + 999) / 1000;
-+  enterSugarTvSleep(elapsedSeconds < REFRESH_SECONDS ? REFRESH_SECONDS - elapsedSeconds : 1);
++  const uint64_t sleepSeconds = elapsedSeconds < REFRESH_SECONDS ? REFRESH_SECONDS - elapsedSeconds : 1;
++  const bool timerWakeArmed = armSugarTvWake(sleepSeconds);
++  appendCycleEvent(cycleResult, attemptedAt, reading, readingCacheSaved, batteryPercentage,
++                   millis() - cycleStartedAtMs, sleepSeconds, timerWakeArmed);
++  enterSugarTvSleep(timerWakeArmed);
 +}
 +
 +void SugarTvActivity::render(RenderLock&&) {
@@ -7252,7 +7260,7 @@ index 00000000..9495e749
 +};
 diff --git a/src/activities/network/SugarTvFrameRenderer.cpp b/src/activities/network/SugarTvFrameRenderer.cpp
 new file mode 100644
-index 00000000..b6b078c0
+index 00000000..471508a2
 --- /dev/null
 +++ b/src/activities/network/SugarTvFrameRenderer.cpp
 @@ -0,0 +1,293 @@
@@ -7551,7 +7559,7 @@ index 00000000..b6b078c0
 +}  // namespace sugartv
 diff --git a/src/activities/network/SugarTvFrameRenderer.h b/src/activities/network/SugarTvFrameRenderer.h
 new file mode 100644
-index 00000000..420272df
+index 00000000..06f703d6
 --- /dev/null
 +++ b/src/activities/network/SugarTvFrameRenderer.h
 @@ -0,0 +1,57 @@
@@ -7949,7 +7957,7 @@ index 00000000..ff3179de
 +};
 diff --git a/src/activities/network/SugarTvLogic.cpp b/src/activities/network/SugarTvLogic.cpp
 new file mode 100644
-index 00000000..cfefc54a
+index 00000000..bd769cdd
 --- /dev/null
 +++ b/src/activities/network/SugarTvLogic.cpp
 @@ -0,0 +1,221 @@
@@ -8176,7 +8184,7 @@ index 00000000..cfefc54a
 +}  // namespace sugartv
 diff --git a/src/activities/network/SugarTvLogic.h b/src/activities/network/SugarTvLogic.h
 new file mode 100644
-index 00000000..d57d0111
+index 00000000..110a6474
 --- /dev/null
 +++ b/src/activities/network/SugarTvLogic.h
 @@ -0,0 +1,49 @@
@@ -8436,7 +8444,7 @@ index f352f493..d85fa11f 100644
    void onExit() override;
    void loop() override;
 diff --git a/src/main.cpp b/src/main.cpp
-index e9d4107b..5230706d 100644
+index e9d4107b..26bc003e 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
 @@ -13,6 +13,7 @@
@@ -8447,8 +8455,7 @@ index e9d4107b..5230706d 100644
  #include <SPI.h>
  #include <WiFi.h>
  #include <builtinFonts/all.h>
-@@ -25,7 +26,8 @@
- #include "MappedInputManager.h"
+@@ -26,6 +27,7 @@
  #include "OpdsServerStore.h"
  #include "RecentBooksStore.h"
  #include "SdCardFontSystem.h"
@@ -8456,28 +8463,57 @@ index e9d4107b..5230706d 100644
  #include "activities/Activity.h"
  #include "activities/ActivityManager.h"
  #include "activities/settings/SdFirmwareUpdateActivity.h"
-@@ -42,6 +43,20 @@ FontDecompressor fontDecompressor;
+@@ -42,6 +44,49 @@ FontDecompressor fontDecompressor;
  SdCardFontSystem sdFontSystem;
  FontCacheManager fontCacheManager(renderer.getFontMap(), renderer.getSdCardFonts());
  static unsigned long allowSleepAt = 0;
 +constexpr uint32_t SUGARTV_WAKE_MAGIC = 0x53554752;
++constexpr char SUGARTV_DIRECTORY[] = "/.crosspoint";
++constexpr char SUGARTV_CYCLE_MARKER_PATH[] = "/.crosspoint/sugartv-cycle-armed";
 +RTC_DATA_ATTR uint32_t sugarTvWakeMagic = 0;
++bool sugarTvCycleMarkerPresent = false;
 +
-+void enterSugarTvSleep(const uint64_t seconds) {
++bool armSugarTvWake(const uint64_t seconds) {
++  sugarTvWakeMagic = SUGARTV_WAKE_MAGIC;
++  if (!sugarTvCycleMarkerPresent) {
++    Storage.ensureDirectoryExists(SUGARTV_DIRECTORY);
++    sugarTvCycleMarkerPresent = Storage.writeFile(SUGARTV_CYCLE_MARKER_PATH, "armed\n");
++    if (!sugarTvCycleMarkerPresent) LOG_ERR("SUGARTV", "Could not persist the scheduled-cycle marker");
++  }
++  const esp_err_t result = esp_sleep_enable_timer_wakeup(seconds * 1000000ULL);
++  if (result != ESP_OK)
++    LOG_ERR("SUGARTV", "Could not arm timer wake for %llu seconds: %s", seconds, esp_err_to_name(result));
++  return result == ESP_OK;
++}
++
++void clearSugarTvCycle() {
++  sugarTvWakeMagic = 0;
++  if (sugarTvCycleMarkerPresent) {
++    if (!Storage.remove(SUGARTV_CYCLE_MARKER_PATH))
++      LOG_ERR("SUGARTV", "Could not remove the scheduled-cycle marker");
++    else
++      sugarTvCycleMarkerPresent = false;
++  }
++}
++
++void enterSugarTvSleep(const bool timerArmed) {
++  if (!timerArmed) {
++    LOG_ERR("SUGARTV", "Restarting instead of sleeping without a timer wake source");
++    ESP.restart();
++    while (true) delay(1000);
++  }
 +  if (WiFi.getMode() != WIFI_MODE_NULL) {
 +    WiFi.disconnect(true);
 +    WiFi.mode(WIFI_OFF);
 +  }
 +  halTiltSensor.deepSleep();
 +  display.deepSleep();
-+  esp_sleep_enable_timer_wakeup(seconds * 1000000ULL);
-+  sugarTvWakeMagic = SUGARTV_WAKE_MAGIC;
 +  powerManager.startDeepSleep(gpio);
 +}
 
  // Fonts
  EpdFont notoserif14RegularFont(&notoserif_14_regular);
-@@ -253,7 +268,6 @@ void setupDisplayAndFonts(bool seamless = false) {
+@@ -253,7 +298,6 @@ void setupDisplayAndFonts(bool seamless = false) {
    renderer.insertFont(UI_10_FONT_ID, ui10FontFamily);
    renderer.insertFont(UI_12_FONT_ID, ui12FontFamily);
    renderer.insertFont(SMALL_FONT_ID, smallFontFamily);
@@ -8485,7 +8521,7 @@ index e9d4107b..5230706d 100644
    // Discover and load SD card fonts
    sdFontSystem.begin(renderer);
 
-@@ -309,6 +324,7 @@ void setup() {
+@@ -309,6 +353,7 @@ void setup() {
    SETTINGS.loadFromFile();
    APP_STATE.loadFromFile();
    RECENT_BOOKS.loadFromFile();
@@ -8493,12 +8529,13 @@ index e9d4107b..5230706d 100644
    I18N.setLanguage(static_cast<Language>(SETTINGS.language));
    KOREADER_STORE.loadFromFile();
    OPDS_STORE.loadFromFile();
-@@ -316,12 +331,21 @@ void setup() {
+@@ -316,18 +361,27 @@ void setup() {
    ButtonNavigator::setMappedInputManager(mappedInputManager);
 
    const auto wakeupReason = gpio.getWakeupReason();
-+  const bool sugarTvCycleArmed = sugarTvWakeMagic == SUGARTV_WAKE_MAGIC;
-+  bool resumeSugarTvCycle = sugarTvCycleArmed && esp_reset_reason() == ESP_RST_DEEPSLEEP;
++  const bool rtcCycleMarkerPresent = sugarTvWakeMagic == SUGARTV_WAKE_MAGIC;
++  sugarTvCycleMarkerPresent = Storage.exists(SUGARTV_CYCLE_MARKER_PATH);
++  bool resumeSugarTvCycle = rtcCycleMarkerPresent || sugarTvCycleMarkerPresent;
    switch (wakeupReason) {
      case HalGPIO::WakeupReason::PowerButton:
        LOG_DBG("MAIN", "Verifying power button press duration");
@@ -8511,12 +8548,19 @@ index e9d4107b..5230706d 100644
 +          powerManager.startDeepSleep(gpio);
 +        }
 +      } else {
-+        sugarTvWakeMagic = 0;
++        clearSugarTvCycle();
 +        resumeSugarTvCycle = false;
        }
        break;
      case HalGPIO::WakeupReason::AfterUSBPower:
-@@ -365,50 +389,56 @@ void setup() {
+-      // If USB power caused a cold boot, go back to sleep
+       LOG_DBG("MAIN", "Wakeup reason: After USB Power");
+-      powerManager.startDeepSleep(gpio);
++      if (!resumeSugarTvCycle) powerManager.startDeepSleep(gpio);
+       break;
+     case HalGPIO::WakeupReason::AfterFlash:
+       // After flashing, just proceed to boot
+@@ -365,50 +419,56 @@ void setup() {
    const BootResume resume = isSilentReboot              ? BootResume::Silent
                              : !APP_STATE.showBootScreen ? BootResume::QuickResume
                                                          : BootResume::Splash;
@@ -8843,7 +8887,7 @@ index 00000000..92ca87bc
 +    main()
 diff --git a/tools/render_sugartv_frame.cpp b/tools/render_sugartv_frame.cpp
 new file mode 100644
-index 00000000..4c4fb444
+index 00000000..52aed4c1
 --- /dev/null
 +++ b/tools/render_sugartv_frame.cpp
 @@ -0,0 +1,117 @@
@@ -8966,7 +9010,7 @@ index 00000000..4c4fb444
 +}
 diff --git a/tools/render_sugartv_preview.py b/tools/render_sugartv_preview.py
 new file mode 100644
-index 00000000..fd5215da
+index 00000000..4fb5127f
 --- /dev/null
 +++ b/tools/render_sugartv_preview.py
 @@ -0,0 +1,191 @@
@@ -9255,7 +9299,7 @@ index 00000000..65f41ef5
 +    main()
 diff --git a/tools/test_sugartv_logic.cpp b/tools/test_sugartv_logic.cpp
 new file mode 100644
-index 00000000..01297936
+index 00000000..58eaf66a
 --- /dev/null
 +++ b/tools/test_sugartv_logic.cpp
 @@ -0,0 +1,113 @@
@@ -9374,7 +9418,7 @@ index 00000000..01297936
 +}
 diff --git a/tools/test_sugartv_preview.py b/tools/test_sugartv_preview.py
 new file mode 100644
-index 00000000..da77592a
+index 00000000..00b9e075
 --- /dev/null
 +++ b/tools/test_sugartv_preview.py
 @@ -0,0 +1,147 @@
