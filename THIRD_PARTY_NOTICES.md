@@ -16,3 +16,10 @@ The firmware patch uses the `mdi:arrow-*`, `mdi:chevron-double-*`,
 [Pictogrammers](https://pictogrammers.com/library/mdi/). The icons are licensed
 under Apache License 2.0. The license is reproduced in
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt).
+
+## Lucide TV icon
+
+The SugarTV application icon is adapted from the Lucide `tv` icon. Lucide is
+licensed under the ISC License, and this icon is also derived from Feather under
+the MIT License. Both notices are reproduced in
+[`LICENSES/Lucide-ISC-and-Feather-MIT.txt`](LICENSES/Lucide-ISC-and-Feather-MIT.txt).

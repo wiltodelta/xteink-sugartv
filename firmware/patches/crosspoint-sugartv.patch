@@ -1,6 +1,27 @@
+diff --git a/assets/sugartv/lucide-tv.svg b/assets/sugartv/lucide-tv.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..039b84f14b38711a7cda0d841f4d91712c805f79
+--- /dev/null
++++ b/assets/sugartv/lucide-tv.svg
+@@ -0,0 +1,15 @@
++<svg
++  xmlns="http://www.w3.org/2000/svg"
++  width="24"
++  height="24"
++  viewBox="0 0 24 24"
++  fill="none"
++  stroke="currentColor"
++  stroke-width="1.5"
++  stroke-linecap="round"
++  stroke-linejoin="round"
++>
++  <!-- Lucide TV, ISC License. Stroke matched to CrossPoint's 32px menu icons. -->
++  <path d="m17 2-5 5-5-5" />
++  <rect width="20" height="15" x="2" y="7" rx="2" />
++</svg>
 diff --git a/assets/sugartv/mdi-arrow-bottom-right.svg b/assets/sugartv/mdi-arrow-bottom-right.svg
 new file mode 100644
-index 00000000..6fc66f5e
+index 0000000000000000000000000000000000000000..6fc66f5e93d25912bc58158ee2dfcf7bf2c9a177
 --- /dev/null
 +++ b/assets/sugartv/mdi-arrow-bottom-right.svg
 @@ -0,0 +1,4 @@
@@ -10,7 +31,7 @@ index 00000000..6fc66f5e
 +</svg>
 diff --git a/assets/sugartv/mdi-arrow-down.svg b/assets/sugartv/mdi-arrow-down.svg
 new file mode 100644
-index 00000000..a686af40
+index 0000000000000000000000000000000000000000..a686af40f67a5f9fccce3faa61c32d29cb2d1323
 --- /dev/null
 +++ b/assets/sugartv/mdi-arrow-down.svg
 @@ -0,0 +1,4 @@
@@ -20,7 +41,7 @@ index 00000000..a686af40
 +</svg>
 diff --git a/assets/sugartv/mdi-arrow-right.svg b/assets/sugartv/mdi-arrow-right.svg
 new file mode 100644
-index 00000000..32b95d4e
+index 0000000000000000000000000000000000000000..32b95d4e7bf154bb033763ece1e1f80e7bd2e78a
 --- /dev/null
 +++ b/assets/sugartv/mdi-arrow-right.svg
 @@ -0,0 +1,4 @@
@@ -30,7 +51,7 @@ index 00000000..32b95d4e
 +</svg>
 diff --git a/assets/sugartv/mdi-arrow-top-right.svg b/assets/sugartv/mdi-arrow-top-right.svg
 new file mode 100644
-index 00000000..4c6674c8
+index 0000000000000000000000000000000000000000..4c6674c8372cedcaff00cd42c8847b0b154f82cc
 --- /dev/null
 +++ b/assets/sugartv/mdi-arrow-top-right.svg
 @@ -0,0 +1,4 @@
@@ -40,7 +61,7 @@ index 00000000..4c6674c8
 +</svg>
 diff --git a/assets/sugartv/mdi-arrow-up.svg b/assets/sugartv/mdi-arrow-up.svg
 new file mode 100644
-index 00000000..b70e5889
+index 0000000000000000000000000000000000000000..b70e58896798dced6db45676c35f01e70c8b9ee2
 --- /dev/null
 +++ b/assets/sugartv/mdi-arrow-up.svg
 @@ -0,0 +1,4 @@
@@ -50,7 +71,7 @@ index 00000000..b70e5889
 +</svg>
 diff --git a/assets/sugartv/mdi-chevron-double-down.svg b/assets/sugartv/mdi-chevron-double-down.svg
 new file mode 100644
-index 00000000..b9c4a022
+index 0000000000000000000000000000000000000000..b9c4a02296654fa8a90b75936f11aff0a875d30b
 --- /dev/null
 +++ b/assets/sugartv/mdi-chevron-double-down.svg
 @@ -0,0 +1,4 @@
@@ -60,7 +81,7 @@ index 00000000..b9c4a022
 +</svg>
 diff --git a/assets/sugartv/mdi-chevron-double-up.svg b/assets/sugartv/mdi-chevron-double-up.svg
 new file mode 100644
-index 00000000..89dc22eb
+index 0000000000000000000000000000000000000000..89dc22eb8bea73c04f4541511e8e5a0b3b801c60
 --- /dev/null
 +++ b/assets/sugartv/mdi-chevron-double-up.svg
 @@ -0,0 +1,4 @@
@@ -70,7 +91,7 @@ index 00000000..89dc22eb
 +</svg>
 diff --git a/assets/sugartv/mdi-help-circle-outline.svg b/assets/sugartv/mdi-help-circle-outline.svg
 new file mode 100644
-index 00000000..3e702d25
+index 0000000000000000000000000000000000000000..3e702d25a8e9bd44543ff8bf326527d0e6123872
 --- /dev/null
 +++ b/assets/sugartv/mdi-help-circle-outline.svg
 @@ -0,0 +1,4 @@
@@ -80,7 +101,7 @@ index 00000000..3e702d25
 +</svg>
 diff --git a/assets/sugartv/mdi-progress-clock.svg b/assets/sugartv/mdi-progress-clock.svg
 new file mode 100644
-index 00000000..bf79a2a0
+index 0000000000000000000000000000000000000000..bf79a2a0cbc0e08a329937d9f26476f3ed4a622b
 --- /dev/null
 +++ b/assets/sugartv/mdi-progress-clock.svg
 @@ -0,0 +1,4 @@
@@ -90,7 +111,7 @@ index 00000000..bf79a2a0
 +</svg>
 diff --git a/lib/EpdFont/builtinFonts/sugartv_battery_8.h b/lib/EpdFont/builtinFonts/sugartv_battery_8.h
 new file mode 100644
-index 00000000..fa3a094c
+index 0000000000000000000000000000000000000000..fa3a094cdc568d2c75464774ab8912b8c86fc4d4
 --- /dev/null
 +++ b/lib/EpdFont/builtinFonts/sugartv_battery_8.h
 @@ -0,0 +1,222 @@
@@ -318,7 +339,7 @@ index 00000000..fa3a094c
 +};
 diff --git a/lib/EpdFont/builtinFonts/sugartv_delta_34.h b/lib/EpdFont/builtinFonts/sugartv_delta_34.h
 new file mode 100644
-index 00000000..92665e9f
+index 0000000000000000000000000000000000000000..92665e9f20319883b87a446b92525f092fb36b21
 --- /dev/null
 +++ b/lib/EpdFont/builtinFonts/sugartv_delta_34.h
 @@ -0,0 +1,388 @@
@@ -712,7 +733,7 @@ index 00000000..92665e9f
 +};
 diff --git a/lib/EpdFont/builtinFonts/sugartv_prediction_14.h b/lib/EpdFont/builtinFonts/sugartv_prediction_14.h
 new file mode 100644
-index 00000000..928a43d2
+index 0000000000000000000000000000000000000000..928a43d210b22728afeb24c11db9ba7d4e4f4266
 --- /dev/null
 +++ b/lib/EpdFont/builtinFonts/sugartv_prediction_14.h
 @@ -0,0 +1,664 @@
@@ -1382,7 +1403,7 @@ index 00000000..928a43d2
 +};
 diff --git a/lib/EpdFont/builtinFonts/sugartv_relative_18.h b/lib/EpdFont/builtinFonts/sugartv_relative_18.h
 new file mode 100644
-index 00000000..3d69ceda
+index 0000000000000000000000000000000000000000..3d69cedaf60243f54a367129facab6f0d5c68638
 --- /dev/null
 +++ b/lib/EpdFont/builtinFonts/sugartv_relative_18.h
 @@ -0,0 +1,909 @@
@@ -2297,7 +2318,7 @@ index 00000000..3d69ceda
 +};
 diff --git a/lib/EpdFont/builtinFonts/sugartv_value_108.h b/lib/EpdFont/builtinFonts/sugartv_value_108.h
 new file mode 100644
-index 00000000..65c22b31
+index 0000000000000000000000000000000000000000..65c22b318705812f8834081913e7266b0b7d07f8
 --- /dev/null
 +++ b/lib/EpdFont/builtinFonts/sugartv_value_108.h
 @@ -0,0 +1,3876 @@
@@ -6178,7 +6199,7 @@ index 00000000..65c22b31
 +    0,
 +};
 diff --git a/lib/EpdFont/scripts/fontconvert.py b/lib/EpdFont/scripts/fontconvert.py
-index 26df3b8a..1c20eb28 100755
+index 26df3b8a78b42d077c80eb73a2c20a571275b647..1c20eb28fd351c0d349b2a21811043e6be63af13 100755
 --- a/lib/EpdFont/scripts/fontconvert.py
 +++ b/lib/EpdFont/scripts/fontconvert.py
 @@ -20,6 +20,7 @@ parser.add_argument("size", type=int, help="font size to use.")
@@ -6192,7 +6213,7 @@ index 26df3b8a..1c20eb28 100755
 @@ -135,6 +136,9 @@ intervals = [
      (0xFFFD, 0xFFFD),
  ]
-
+ 
 +if args.intervals_only:
 +    intervals = []
 +
@@ -6210,8 +6231,134 @@ index 26df3b8a..1c20eb28 100755
  print(f"    {norm_ceil(face.size.ascender)},")
  print(f"    {norm_floor(face.size.descender)},")
  print(f"    {'true' if is2Bit else 'false'},")
+diff --git a/lib/hal/HalGPIO.cpp b/lib/hal/HalGPIO.cpp
+index bf3aec3f9052352ce300b0419d0e8dcca60f43c8..4cf5d2260590d0e300dd893e42f4f598fce9c2f7 100644
+--- a/lib/hal/HalGPIO.cpp
++++ b/lib/hal/HalGPIO.cpp
+@@ -257,8 +257,15 @@ HalGPIO::WakeupReason HalGPIO::getWakeupReason() const {
+ 
+   const bool usbConnected = isUsbConnected();
+ 
+-  if (resetReason == ESP_RST_DEEPSLEEP &&
+-      (wakeupCause == ESP_SLEEP_WAKEUP_GPIO || wakeupCause == ESP_SLEEP_WAKEUP_EXT1)) {
++  if (resetReason == ESP_RST_DEEPSLEEP && wakeupCause == ESP_SLEEP_WAKEUP_GPIO) {
++    const uint64_t wakeMask = esp_sleep_get_gpio_wakeup_status();
++    constexpr uint64_t XTEINK_BUTTON_LADDER_MASK = (1ULL << 1) | (1ULL << 2);
++    const int8_t powerPin = BoardConfig::ACTIVE.input.power;
++    if (powerPin >= 0 && (wakeMask & (1ULL << powerPin))) return WakeupReason::PowerButton;
++    if (deviceIsX3() && (wakeMask & XTEINK_BUTTON_LADDER_MASK)) return WakeupReason::ShortcutButton;
++    return WakeupReason::PowerButton;
++  }
++  if (resetReason == ESP_RST_DEEPSLEEP && wakeupCause == ESP_SLEEP_WAKEUP_EXT1) {
+     return WakeupReason::PowerButton;
+   }
+   if (wakeupCause == ESP_SLEEP_WAKEUP_UNDEFINED && resetReason == ESP_RST_POWERON && !usbConnected) {
+diff --git a/lib/hal/HalGPIO.h b/lib/hal/HalGPIO.h
+index 69755bd4e98016c4d34bc0629fa5114b6f69bc2f..115ef556cae2b15defd5c21329dfd8cae0644cb6 100644
+--- a/lib/hal/HalGPIO.h
++++ b/lib/hal/HalGPIO.h
+@@ -93,7 +93,7 @@ class HalGPIO {
+   // Returns true once per edge (plug or unplug) since the last update()
+   bool wasUsbStateChanged() const;
+ 
+-  enum class WakeupReason { PowerButton, AfterFlash, AfterUSBPower, Other };
++  enum class WakeupReason { PowerButton, ShortcutButton, AfterFlash, AfterUSBPower, Other };
+ 
+   WakeupReason getWakeupReason() const;
+ 
+diff --git a/lib/hal/HalPowerManager.cpp b/lib/hal/HalPowerManager.cpp
+index 358c921c111d05d1a684eba1b94c331156bc89b2..3448bf79421bb4ee1c58d469006277245b777b71 100644
+--- a/lib/hal/HalPowerManager.cpp
++++ b/lib/hal/HalPowerManager.cpp
+@@ -57,7 +57,7 @@ void HalPowerManager::setPowerSaving(bool enabled) {
+   // Otherwise, no change needed
+ }
+ 
+-void HalPowerManager::startDeepSleep(HalGPIO& gpio) const {
++void HalPowerManager::startDeepSleep(HalGPIO& gpio, const bool preserveXteinkPowerRail) const {
+ #ifdef ENABLE_SERIAL_LOG
+   // Tear down HWCDC so the host sees a clean disconnect and the peripheral
+   // doesn't hold power domains that interfere with USB-powered GPIO wake.
+@@ -84,7 +84,13 @@ void HalPowerManager::startDeepSleep(HalGPIO& gpio) const {
+   // button. Must run after display.deepSleep() so the panel controller gets its
+   // deep-sleep command while its rail is still up (enterDeepSleep() in main.cpp
+   // guarantees that ordering).
+-  freeink::PowerManager::powerDownRailsForSleep();
++  // On the tested X3 hardware, taking GPIO13 low removes battery power from the
++  // ESP32 even though the board profile identifies it as the SD rail. Keep the
++  // rail asserted for timer-driven SugarTV sleeps so the internal wake timer
++  // remains powered. Ordinary user-requested sleep retains the canonical path.
++  if (!(preserveXteinkPowerRail && gpio.deviceIsX3())) {
++    freeink::PowerManager::powerDownRailsForSleep();
++  }
+ 
+   // Waits for the power button to be physically released (so holding it doesn't
+   // immediately wake the device again), then arms the wake source and sleeps.
+diff --git a/lib/hal/HalPowerManager.h b/lib/hal/HalPowerManager.h
+index d2cc99c12b04a9086d70556798352f4656ca9659..6877171446ed9de77f7f104617d0f2e9403b5292 100644
+--- a/lib/hal/HalPowerManager.h
++++ b/lib/hal/HalPowerManager.h
+@@ -40,7 +40,7 @@ class HalPowerManager {
+ 
+   // Setup wake up GPIO and enter deep sleep
+   // Should be called inside main loop() to handle the currentLockMode
+-  void startDeepSleep(HalGPIO& gpio) const;
++  void startDeepSleep(HalGPIO& gpio, bool preserveXteinkPowerRail = false) const;
+ 
+   // Get battery percentage (range 0-100)
+   uint16_t getBatteryPercentage() const;
+diff --git a/scripts/convert_icon.py b/scripts/convert_icon.py
+index 6e20fc8cc80855dc307c5686ad463cd8c08f3d15..20bf068b0448bd0aaef7ffe9a7eb0df53c9d3b7a 100644
+--- a/scripts/convert_icon.py
++++ b/scripts/convert_icon.py
+@@ -22,12 +22,14 @@ def load_image(path, width, height):
+         img = Image.open(io.BytesIO(png_bytes))
+     else:
+         img = Image.open(path)
+-        img = img.convert('RGBA')
+         img = img.resize((width, height), Image.LANCZOS)
+-        # Flatten alpha: paste on white background
+-        background = Image.new('RGBA', img.size, (255, 255, 255, 255))
+-        background.paste(img, mask=img.split()[3])
+-        img = background
++    # SVG renderers also return transparency. Flatten every input onto white;
++    # converting transparent pixels directly to grayscale makes them black and
++    # turns an outline icon into a solid square.
++    img = img.convert('RGBA')
++    background = Image.new('RGBA', img.size, (255, 255, 255, 255))
++    background.paste(img, mask=img.getchannel('A'))
++    img = background
+     # Rotate 90 degrees counterclockwise
+     img = img.rotate(90, expand=True)
+     return img
+@@ -50,15 +52,16 @@ def image_to_c_array(img, array_name):
+                     byte |= (bit << (7 - b))
+             packed.append(byte)
+     # Format as C array
+-    c = f'#pragma once\n#include <cstdint>\n\n'
+-    c += f'// size: {width}x{height}\n'
+-    c += f'static const uint8_t {array_name}[] = {{\n    '
+-    for i, v in enumerate(packed):
+-        c += f'0x{v:02X}, '
+-        if (i + 1) % 16 == 0:
+-            c += '\n    '
+-    c = c.rstrip(', \n') + '\n};\n'
+-    return c
++    rows = []
++    for start in range(0, len(packed), 16):
++        values = ', '.join(f'0x{value:02X}' for value in packed[start:start + 16])
++        rows.append(f'    {values}')
++    body = ',\n'.join(rows)
++    return (
++        '#pragma once\n#include <cstdint>\n\n'
++        f'// size: {width}x{height}\n'
++        f'static const uint8_t {array_name}[] = {{\n{body}\n}};\n'
++    )
+ 
+ def main():
+     if any(arg in ('-h', '--help') for arg in sys.argv[1:]):
 diff --git a/src/activities/ActivityManager.cpp b/src/activities/ActivityManager.cpp
-index 8c0a871f..3d0b9549 100644
+index 8c0a871fe34dc694fcf232bdb914ea3b4daab413..3d0b9549a7b91f229799119ae8c4f9b104934f92 100644
 --- a/src/activities/ActivityManager.cpp
 +++ b/src/activities/ActivityManager.cpp
 @@ -14,6 +14,7 @@
@@ -6223,9 +6370,9 @@ index 8c0a871f..3d0b9549 100644
  #include "settings/OpdsServerListActivity.h"
  #include "settings/SettingsActivity.h"
 @@ -219,6 +220,10 @@ void ActivityManager::goToSleep(bool fromTimeout) {
-
+ 
  void ActivityManager::goToBoot() { replaceActivity(std::make_unique<BootActivity>(renderer, mappedInput)); }
-
+ 
 +void ActivityManager::goToSugarTv(const bool silent) {
 +  replaceActivity(std::make_unique<SugarTvActivity>(renderer, mappedInput, silent));
 +}
@@ -6234,16 +6381,16 @@ index 8c0a871f..3d0b9549 100644
    replaceActivity(std::make_unique<FullScreenMessageActivity>(renderer, mappedInput, std::move(message), style));
  }
 diff --git a/src/activities/ActivityManager.h b/src/activities/ActivityManager.h
-index 8d3c49e7..a838e05e 100644
+index 8d3c49e7f3385c001f421394d4453e402a5ef99e..a838e05e0819aeb79850e6de653e3fe65fd98830 100644
 --- a/src/activities/ActivityManager.h
 +++ b/src/activities/ActivityManager.h
 @@ -17,7 +17,7 @@
  class Activity;    // forward declaration
  class RenderLock;  // forward declaration
-
+ 
 -enum class HomeMenuItem { NONE, FILE_BROWSER, RECENTS, OPDS_BROWSER, FILE_TRANSFER, SETTINGS_MENU };
 +enum class HomeMenuItem { NONE, FILE_BROWSER, RECENTS, OPDS_BROWSER, SUGARTV, FILE_TRANSFER, SETTINGS_MENU };
-
+ 
  /**
   * ActivityManager
 @@ -89,6 +89,7 @@ class ActivityManager {
@@ -6255,12 +6402,12 @@ index 8d3c49e7..a838e05e 100644
    void goToCrashReport();
    void goHome(HomeMenuItem initialMenuItem = HomeMenuItem::NONE);
 diff --git a/src/activities/home/HomeActivity.cpp b/src/activities/home/HomeActivity.cpp
-index c15059ad..1b4dc001 100644
+index c15059adfa90b91e5b99f3221f08ebc123e52489..f76a6f8374418ab61c61a9770106bd46564f353b 100644
 --- a/src/activities/home/HomeActivity.cpp
 +++ b/src/activities/home/HomeActivity.cpp
 @@ -21,7 +21,7 @@
  #include "fontIds.h"
-
+ 
  int HomeActivity::getMenuItemCount() const {
 -  int count = 4;  // File Browser, Recents, File transfer, Settings
 +  int count = 5;  // File Browser, Recents, SugarTV, File transfer, Settings
@@ -6279,26 +6426,26 @@ index c15059ad..1b4dc001 100644
          break;
 @@ -300,9 +303,9 @@ void HomeActivity::render(RenderLock&&) {
                            std::bind(&HomeActivity::storeCoverBuffer, this));
-
+ 
    // Build menu items dynamically
 -  std::vector<const char*> menuItems = {tr(STR_BROWSE_FILES), tr(STR_MENU_RECENT_BOOKS), tr(STR_FILE_TRANSFER),
 -                                        tr(STR_SETTINGS_TITLE)};
 -  std::vector<UIIcon> menuIcons = {Folder, Recent, Transfer, Settings};
 +  std::vector<const char*> menuItems = {tr(STR_BROWSE_FILES), tr(STR_MENU_RECENT_BOOKS), "SugarTV",
 +                                        tr(STR_FILE_TRANSFER), tr(STR_SETTINGS_TITLE)};
-+  std::vector<UIIcon> menuIcons = {Folder, Recent, Wifi, Transfer, Settings};
-
++  std::vector<UIIcon> menuIcons = {Folder, Recent, Tv, Transfer, Settings};
+ 
    if (hasOpdsServers) {
      menuItems.insert(menuItems.begin() + 2, tr(STR_OPDS_BROWSER));
 @@ -350,4 +353,6 @@ void HomeActivity::onSettingsOpen() { activityManager.goToSettings(); }
-
+ 
  void HomeActivity::onFileTransferOpen() { activityManager.goToFileTransfer(); }
-
+ 
 +void HomeActivity::onSugarTvOpen() { activityManager.goToSugarTv(); }
 +
  void HomeActivity::onOpdsBrowserOpen() { activityManager.goToBrowser(); }
 diff --git a/src/activities/home/HomeActivity.h b/src/activities/home/HomeActivity.h
-index 84bd62ec..80a91d51 100644
+index 84bd62ec99daba7d7f361b52815c908b37322a97..80a91d518bfcf738684d2c1d09ca87c102c33558 100644
 --- a/src/activities/home/HomeActivity.h
 +++ b/src/activities/home/HomeActivity.h
 @@ -42,6 +42,8 @@ class HomeActivity final : public Activity {
@@ -6324,14 +6471,14 @@ index 84bd62ec..80a91d51 100644
    void onFileTransferOpen();
 +  void onSugarTvOpen();
    void onOpdsBrowserOpen();
-
+ 
    int getMenuItemCount() const;
 diff --git a/src/activities/network/SugarTvActivity.cpp b/src/activities/network/SugarTvActivity.cpp
 new file mode 100644
-index 00000000..0fee77c6
+index 0000000000000000000000000000000000000000..30eb1ada8dda64e7c908a5cfc9737a35cacb3f51
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.cpp
-@@ -0,0 +1,896 @@
+@@ -0,0 +1,929 @@
 +#include "SugarTvActivity.h"
 +
 +#include <ArduinoJson.h>
@@ -6341,6 +6488,7 @@ index 00000000..0fee77c6
 +#include <HalStorage.h>
 +#include <Logging.h>
 +#include <WiFi.h>
++#include <builtinFonts/notosans_8_regular.h>
 +#include <builtinFonts/sugartv_battery_8.h>
 +#include <builtinFonts/sugartv_delta_34.h>
 +#include <builtinFonts/sugartv_prediction_14.h>
@@ -6378,6 +6526,7 @@ index 00000000..0fee77c6
 +
 +namespace {
 +constexpr uint64_t REFRESH_SECONDS = 60;
++constexpr uint32_t HTTP_BUDGET_MS = 20000;
 +constexpr time_t VALID_CLOCK_AFTER = 1700000000;
 +constexpr char SUGARTV_DIRECTORY[] = "/.crosspoint";
 +constexpr char ENTITY_CACHE_PATH[] = "/.crosspoint/sugartv-entity.txt";
@@ -6388,7 +6537,32 @@ index 00000000..0fee77c6
 +constexpr size_t MAX_ENTITY_ID_LENGTH = 159;
 +constexpr size_t MAX_STATE_OBJECT_SIZE = 8192;
 +constexpr size_t MAX_SETTINGS_SIZE = 2048;
++uint32_t httpBudgetStartedAtMs = 0;
 +enum class StateReadResult { Ok, Unavailable, RequestFailed };
++
++uint32_t remainingHttpBudgetMs() {
++  const uint32_t elapsed = static_cast<uint32_t>(millis() - httpBudgetStartedAtMs);
++  return elapsed < HTTP_BUDGET_MS ? HTTP_BUDGET_MS - elapsed : 0;
++}
++
++bool fetchSugarTvUrl(const std::string& url, std::string& content) {
++  const uint32_t timeoutMs = remainingHttpBudgetMs();
++  if (timeoutMs == 0) {
++    LOG_ERR("SUGARTV", "HTTP budget exhausted");
++    return false;
++  }
++  return HttpDownloader::fetchUrl(url, content, "", "", SUGARTV_HA_TOKEN, timeoutMs);
++}
++
++bool fetchSugarTvUrl(const std::string& url, const HttpDownloader::DataCallback& onData) {
++  const uint32_t timeoutMs = remainingHttpBudgetMs();
++  if (timeoutMs == 0) {
++    LOG_ERR("SUGARTV", "HTTP budget exhausted");
++    return false;
++  }
++  return HttpDownloader::fetchUrl(url, onData, "", "", SUGARTV_HA_TOKEN, timeoutMs);
++}
++
 +bool hasValidClock(const time_t value) { return value >= VALID_CLOCK_AFTER; }
 +void configureTimezone() {
 +  static bool configured = false;
@@ -6574,7 +6748,7 @@ index 00000000..0fee77c6
 +    found = true;
 +  };
 +
-+  HttpDownloader::fetchUrl(
++  fetchSugarTvUrl(
 +      apiUrl("/api/states"),
 +      [&](const uint8_t* data, size_t length) {
 +        for (size_t i = 0; i < length; ++i) {
@@ -6613,8 +6787,7 @@ index 00000000..0fee77c6
 +          }
 +        }
 +        return true;
-+      },
-+      "", "", SUGARTV_HA_TOKEN);
++      });
 +
 +  if (!found) {
 +    LOG_ERR("SUGARTV", "No blood glucose sensor was found");
@@ -6633,7 +6806,7 @@ index 00000000..0fee77c6
 +
 +bool fetchJson(const std::string& path, JsonDocument& doc) {
 +  std::string body;
-+  if (!HttpDownloader::fetchUrl(apiUrl(path), body, "", "", SUGARTV_HA_TOKEN)) return false;
++  if (!fetchSugarTvUrl(apiUrl(path), body)) return false;
 +  const DeserializationError error = deserializeJson(doc, body);
 +  if (error) {
 +    LOG_ERR("SUGARTV", "Invalid Home Assistant JSON: %s", error.c_str());
@@ -7081,7 +7254,7 @@ index 00000000..0fee77c6
 +  const char* prediction = config.showPrediction ? predictionText(config, reading) : "";
 +  DeviceFrameCanvas canvas(renderer);
 +  const sugartv::FrameFonts fonts{&::sugartv_value_108, &::sugartv_delta_34, &::sugartv_relative_18,
-+                                 &::sugartv_prediction_14, &::sugartv_battery_8};
++                                 &::sugartv_prediction_14, &::sugartv_battery_8, &::notosans_8_regular};
 +  const sugartv::FrameContent content{timeText,
 +                                     valueText,
 +                                     delta,
@@ -7104,11 +7277,12 @@ index 00000000..0fee77c6
 +  renderer.displayBuffer(HalDisplay::HALF_REFRESH);
 +}
 +
-+Reading renderFailedUpdate(GfxRenderer& renderer, const time_t attemptedAt) {
++Reading renderFailedUpdate(GfxRenderer& renderer, const time_t attemptedAt, const uint16_t batteryPercentage) {
 +  CardConfig config;
 +  loadSettings(config);
 +  Reading reading;
 +  loadCachedReadingOrFallback(reading);
++  reading.batteryPercentage = batteryPercentage;
 +  renderReading(renderer, config, reading, true, attemptedAt);
 +  return reading;
 +}
@@ -7123,20 +7297,24 @@ index 00000000..0fee77c6
 +  renderer.setOrientation(GfxRenderer::Orientation::Portrait);
 +  state = State::Connecting;
 +  if (!silent) requestUpdate();
-+  startActivityForResult(std::make_unique<WifiSelectionActivity>(renderer, mappedInput, true, silent),
++  // Scheduled refreshes reconnect headlessly. A visible launch comes from the
++  // Wi-Fi shortcut and must remain in manual selection instead of immediately
++  // reconnecting to the last network and closing the list.
++  startActivityForResult(std::make_unique<WifiSelectionActivity>(renderer, mappedInput, silent, silent),
 +                         [this](const ActivityResult& result) {
 +                           if (result.isCancelled) {
 +                             if (silent) {
 +                               const time_t attemptedAt = time(nullptr);
++                               const uint16_t batteryPercentage = powerManager.getBatteryPercentage();
 +                               Reading reading;
 +                               {
 +                                 RenderLock lock(*this);
-+                                 reading = renderFailedUpdate(renderer, attemptedAt);
++                                 reading = renderFailedUpdate(renderer, attemptedAt, batteryPercentage);
 +                               }
 +                               const bool timerWakeArmed = armSugarTvWake(REFRESH_SECONDS);
 +                               appendCycleEvent(CycleResult::WifiFailed, attemptedAt, reading, false,
-+                                                powerManager.getBatteryPercentage(), millis() - cycleStartedAtMs,
-+                                                REFRESH_SECONDS, timerWakeArmed);
++                                                batteryPercentage, millis() - cycleStartedAtMs, REFRESH_SECONDS,
++                                                timerWakeArmed);
 +                               enterSugarTvSleep(timerWakeArmed);
 +                             } else {
 +                               onGoHome();
@@ -7166,6 +7344,7 @@ index 00000000..0fee77c6
 +}
 +
 +void SugarTvActivity::downloadAndDisplay() {
++  httpBudgetStartedAtMs = millis();
 +  if (!hasValidClock(time(nullptr))) halClock.syncFromNTP();
 +  CardConfig config;
 +  loadSettings(config);
@@ -7207,6 +7386,7 @@ index 00000000..0fee77c6
 +    if (!readingCacheSaved) LOG_ERR("SUGARTV", "Could not cache the latest reading");
 +  } else {
 +    loadCachedReadingOrFallback(reading);
++    reading.batteryPercentage = batteryPercentage;
 +  }
 +  {
 +    RenderLock lock(*this);
@@ -7230,7 +7410,7 @@ index 00000000..0fee77c6
 +}
 diff --git a/src/activities/network/SugarTvActivity.h b/src/activities/network/SugarTvActivity.h
 new file mode 100644
-index 00000000..9495e749
+index 0000000000000000000000000000000000000000..9495e749690fa8d0a7ac8df66056e8d4c8373727
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.h
 @@ -0,0 +1,24 @@
@@ -7260,10 +7440,10 @@ index 00000000..9495e749
 +};
 diff --git a/src/activities/network/SugarTvFrameRenderer.cpp b/src/activities/network/SugarTvFrameRenderer.cpp
 new file mode 100644
-index 00000000..471508a2
+index 0000000000000000000000000000000000000000..ff4173c4aac1a80fd08ab5d88243416e8ae3c7e3
 --- /dev/null
 +++ b/src/activities/network/SugarTvFrameRenderer.cpp
-@@ -0,0 +1,293 @@
+@@ -0,0 +1,335 @@
 +#include "SugarTvFrameRenderer.h"
 +
 +#include "SugarTvIcons.h"
@@ -7411,7 +7591,8 @@ index 00000000..471508a2
 +    int position = 0;
 +    for (int gy = 0; gy < glyph->height; ++gy) {
 +      for (int gx = 0; gx < glyph->width; ++gx, ++position) {
-+        const uint8_t value = (bitmap[position >> 2] >> ((3 - (position & 3)) * 2)) & 0x3;
++        const uint8_t value = font.is2Bit ? (bitmap[position >> 2] >> ((3 - (position & 3)) * 2)) & 0x3
++                                          : (bitmap[position >> 3] >> (7 - (position & 7))) & 0x1;
 +        if (value) painter.pixel(cursor + glyph->left + gx, baseline - glyph->top + gy, ink);
 +      }
 +    }
@@ -7471,6 +7652,46 @@ index 00000000..471508a2
 +
 +void progressClock(Painter& painter, const int cx, const int cy, const bool ink) {
 +  bitmapIcon(painter, cx, cy, SUGARTV_PROGRESS_CLOCK, ink);
++}
++
++void drawHardwareHints(Painter& painter, const EpdFontData& font, const bool ink) {
++  // Match LyraTheme::drawButtonHints for the X3's fourth physical button.
++  // Keep Lyra's center (x=423), height, radius, fill, font, and open bottom;
++  // widen only enough for the explicit action name.
++  constexpr int x = 363;
++  constexpr int y = FRAME_HEIGHT - 40;
++  constexpr int width = 120;
++  constexpr int height = 40;
++  constexpr int radius = 6;
++  constexpr char action[] = "Manage Wi-Fi";
++
++  const int right = x + width - 1;
++  const int bottom = y + height - 1;
++  const int radiusSquared = radius * radius;
++  for (int py = y; py <= bottom; ++py) {
++    for (int px = x; px <= right; ++px) {
++      const int cornerX = px < x + radius ? x + radius : (px > right - radius ? right - radius : px);
++      const int cornerY = py < y + radius ? y + radius : (py > bottom - radius ? bottom - radius : py);
++      const int dx = px - cornerX;
++      const int dy = py - cornerY;
++      if (dx * dx + dy * dy <= radiusSquared) painter.pixel(px, py, false);
++    }
++  }
++
++  painter.line(x + radius, y, right - radius, y, 1, ink);
++  painter.line(x, y + radius, x, bottom - radius, 1, ink);
++  painter.line(right, y + radius, right, bottom - radius, 1, ink);
++  for (int dy = 0; dy <= radius; ++dy) {
++    for (int dx = 0; dx <= radius; ++dx) {
++      const int distanceSquared = dx * dx + dy * dy;
++      if (distanceSquared <= radiusSquared && distanceSquared >= (radius - 1) * (radius - 1)) {
++        painter.pixel(x + radius - dx, y + radius - dy, ink);
++        painter.pixel(right - radius + dx, y + radius - dy, ink);
++      }
++    }
++  }
++
++  drawText(painter, font, x + (width - textWidth(font, action)) / 2, y + 7, action, ink);
 +}
 +
 +std::vector<std::string> wrap(const EpdFontData& font, const char* text, const int maxWidth) {
@@ -7553,16 +7774,17 @@ index 00000000..471508a2
 +    painter.fillRect(16, 16, statusWidth + 16, badgeHeight, false);
 +  }
 +  drawText(painter, *fonts.battery, 24, 20, content.statusText, content.updateFailed ? true : ink);
++  drawHardwareHints(painter, *fonts.guide, ink);
 +  return painter.stats;
 +}
 +
 +}  // namespace sugartv
 diff --git a/src/activities/network/SugarTvFrameRenderer.h b/src/activities/network/SugarTvFrameRenderer.h
 new file mode 100644
-index 00000000..06f703d6
+index 0000000000000000000000000000000000000000..aa8548b0a23dca25c51eea425357baafb0ea5dd7
 --- /dev/null
 +++ b/src/activities/network/SugarTvFrameRenderer.h
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,58 @@
 +#pragma once
 +
 +#include <EpdFontData.h>
@@ -7582,6 +7804,7 @@ index 00000000..06f703d6
 +  const EpdFontData* relative;
 +  const EpdFontData* prediction;
 +  const EpdFontData* battery;
++  const EpdFontData* guide;
 +};
 +
 +struct FrameContent {
@@ -7622,7 +7845,7 @@ index 00000000..06f703d6
 +}  // namespace sugartv
 diff --git a/src/activities/network/SugarTvIcons.h b/src/activities/network/SugarTvIcons.h
 new file mode 100644
-index 00000000..ff3179de
+index 0000000000000000000000000000000000000000..ff3179de8609f7d3101d116ec81e724cdfdf5765
 --- /dev/null
 +++ b/src/activities/network/SugarTvIcons.h
 @@ -0,0 +1,329 @@
@@ -7957,7 +8180,7 @@ index 00000000..ff3179de
 +};
 diff --git a/src/activities/network/SugarTvLogic.cpp b/src/activities/network/SugarTvLogic.cpp
 new file mode 100644
-index 00000000..bd769cdd
+index 0000000000000000000000000000000000000000..bd769cddec62aab9c091a66690b03053872b6715
 --- /dev/null
 +++ b/src/activities/network/SugarTvLogic.cpp
 @@ -0,0 +1,221 @@
@@ -8184,7 +8407,7 @@ index 00000000..bd769cdd
 +}  // namespace sugartv
 diff --git a/src/activities/network/SugarTvLogic.h b/src/activities/network/SugarTvLogic.h
 new file mode 100644
-index 00000000..110a6474
+index 0000000000000000000000000000000000000000..110a64741ecd14f8112ff7ea29e8a43da22350e8
 --- /dev/null
 +++ b/src/activities/network/SugarTvLogic.h
 @@ -0,0 +1,49 @@
@@ -8238,7 +8461,7 @@ index 00000000..110a6474
 +
 +}  // namespace sugartv
 diff --git a/src/activities/network/WifiSelectionActivity.cpp b/src/activities/network/WifiSelectionActivity.cpp
-index 6e73a7a8..be3c8385 100644
+index 6e73a7a89fcef2403620c220514398d2886fcbed..be3c8385581daccca382ba50f1aa203f442034e7 100644
 --- a/src/activities/network/WifiSelectionActivity.cpp
 +++ b/src/activities/network/WifiSelectionActivity.cpp
 @@ -40,9 +40,15 @@ void WifiSelectionActivity::onEnter() {
@@ -8248,7 +8471,7 @@ index 6e73a7a8..be3c8385 100644
 +  retrySsidAfterScan.clear();
    const size_t savedCredentialCount = WIFI_STORE.getCredentialCount();
    autoAttemptedSsids.reserve(savedCredentialCount);
-
+ 
 +  if (headless && savedCredentialCount == 0) {
 +    onComplete(false);
 +    return;
@@ -8259,7 +8482,7 @@ index 6e73a7a8..be3c8385 100644
    WiFi.macAddress(mac);
 @@ -116,6 +122,10 @@ void WifiSelectionActivity::processWifiScanResults() {
    }
-
+ 
    if (scanResult == WIFI_SCAN_FAILED) {
 +    if (headless) {
 +      onComplete(false);
@@ -8271,7 +8494,7 @@ index 6e73a7a8..be3c8385 100644
 @@ -173,6 +183,11 @@ void WifiSelectionActivity::processWifiScanResults() {
      return;
    }
-
+ 
 +  if (headless) {
 +    onComplete(false);
 +    return;
@@ -8281,7 +8504,7 @@ index 6e73a7a8..be3c8385 100644
    manualNetworkListRequested = false;
    state = WifiSelectionState::NETWORK_LIST;
 @@ -212,11 +227,12 @@ void WifiSelectionActivity::selectNetwork(const int index) {
-
+ 
    // Check if we have saved credentials for this network
    const auto savedCred = WIFI_STORE.findCredential(selectedSSID);
 -  if (savedCred && !savedCred->password.empty()) {
@@ -8299,7 +8522,7 @@ index 6e73a7a8..be3c8385 100644
 @@ -277,13 +293,14 @@ bool WifiSelectionActivity::hasAttemptedAutoSsid(const std::string& ssid) const
    return std::find(autoAttemptedSsids.begin(), autoAttemptedSsids.end(), ssid) != autoAttemptedSsids.end();
  }
-
+ 
 -bool WifiSelectionActivity::tryAutoConnectCredential(const WifiCredential& cred) {
 -  if (hasAttemptedAutoSsid(cred.ssid)) {
 +bool WifiSelectionActivity::tryAutoConnectCredential(const WifiCredential& cred, const bool retry) {
@@ -8307,7 +8530,7 @@ index 6e73a7a8..be3c8385 100644
 +  if (attempted && !retry) {
      return false;
    }
-
+ 
    LOG_DBG("WIFI", "Attempting saved network: %s", cred.ssid.c_str());
 -  autoAttemptedSsids.push_back(cred.ssid);
 +  if (!attempted) autoAttemptedSsids.push_back(cred.ssid);
@@ -8316,7 +8539,7 @@ index 6e73a7a8..be3c8385 100644
    selectedRequiresPassword = !cred.password.empty();
 @@ -296,6 +313,18 @@ bool WifiSelectionActivity::tryAutoConnectCredential(const WifiCredential& cred)
  }
-
+ 
  bool WifiSelectionActivity::tryNextSavedNetworkFromScan() {
 +  if (!retrySsidAfterScan.empty()) {
 +    const std::string retrySsid = retrySsidAfterScan;
@@ -8347,18 +8570,18 @@ index 6e73a7a8..be3c8385 100644
 @@ -324,6 +357,10 @@ void WifiSelectionActivity::handleAutoConnectFailure() {
      return;
    }
-
+ 
 +  // A cold radio can report WL_NO_SSID_AVAIL before its first association has
 +  // had a fair chance to complete. Retry that credential only if a fresh scan
 +  // confirms the AP is reachable.
 +  retrySsidAfterScan = selectedSSID;
    startWifiScan(true);
  }
-
+ 
 @@ -415,19 +452,24 @@ void WifiSelectionActivity::checkConnectionStatus() {
        WIFI_STORE.setLastConnectedSsid(selectedSSID);
      }
-
+ 
 -    // If we entered a new password, ask if user wants to save it
 -    // Otherwise, immediately complete so parent can start web server
      if (!usedSavedPassword && !enteredPassword.empty()) {
@@ -8386,10 +8609,10 @@ index 6e73a7a8..be3c8385 100644
 +    onComplete(true);
      return;
    }
-
+ 
 @@ -760,6 +802,10 @@ std::string WifiSelectionActivity::getSignalStrengthIndicator(const int32_t rssi
  }
-
+ 
  void WifiSelectionActivity::render(RenderLock&&) {
 +  if (headless) {
 +    return;
@@ -8399,23 +8622,23 @@ index 6e73a7a8..be3c8385 100644
    // from the keyboard subactivity back to the main activity
    if (state == WifiSelectionState::PASSWORD_ENTRY || state == WifiSelectionState::HIDDEN_SSID_ENTRY) {
 diff --git a/src/activities/network/WifiSelectionActivity.h b/src/activities/network/WifiSelectionActivity.h
-index f352f493..d85fa11f 100644
+index f352f493fc369d8aa7c97b27d7431083e4470903..d85fa11f5a1a7c336083c9fe0cbb88478739ba93 100644
 --- a/src/activities/network/WifiSelectionActivity.h
 +++ b/src/activities/network/WifiSelectionActivity.h
 @@ -76,6 +76,9 @@ class WifiSelectionActivity final : public Activity {
    // Whether to attempt auto-connect on entry
    const bool allowAutoConnect;
-
+ 
 +  // Keep the retained e-ink frame untouched during background reconnects.
 +  const bool headless;
 +
    // Whether we are attempting to auto-connect or auto-scan saved networks.
    bool autoConnecting = false;
-
+ 
 @@ -85,6 +88,9 @@ class WifiSelectionActivity final : public Activity {
    // Saved SSIDs already attempted during the current auto-connect session.
    std::vector<std::string> autoAttemptedSsids;
-
+ 
 +  // A blind cold-start attempt may be retried once if a scan confirms the AP.
 +  std::string retrySsidAfterScan;
 +
@@ -8433,7 +8656,7 @@ index f352f493..d85fa11f 100644
    void showNetworkListFromAutoConnect();
 @@ -120,8 +126,9 @@ class WifiSelectionActivity final : public Activity {
    void onComplete(bool connected);
-
+ 
   public:
 -  explicit WifiSelectionActivity(GfxRenderer& renderer, MappedInputManager& mappedInput, bool autoConnect = true)
 -      : Activity("WifiSelection", renderer, mappedInput), allowAutoConnect(autoConnect) {}
@@ -8443,19 +8666,89 @@ index f352f493..d85fa11f 100644
    void onEnter() override;
    void onExit() override;
    void loop() override;
+diff --git a/src/components/icons/tv.h b/src/components/icons/tv.h
+new file mode 100644
+index 0000000000000000000000000000000000000000..d40ee9a1ee2058b6709122529b81fbf48927c267
+--- /dev/null
++++ b/src/components/icons/tv.h
+@@ -0,0 +1,14 @@
++#pragma once
++#include <cstdint>
++
++// size: 32x32
++static const uint8_t TvIcon[] = {
++    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xC0, 0x00, 0x07, 0xFF, 0x80, 0x00, 0x03,
++    0xFF, 0x9F, 0xFF, 0xF3, 0xFF, 0x3F, 0xFF, 0xF3, 0xFF, 0x3F, 0xFF, 0xF3, 0xFF, 0x3F, 0xFF, 0xF3,
++    0xDF, 0x3F, 0xFF, 0xF3, 0xCF, 0x3F, 0xFF, 0xF3, 0xC7, 0x3F, 0xFF, 0xF3, 0xE3, 0x3F, 0xFF, 0xF3,
++    0xF1, 0x3F, 0xFF, 0xF3, 0xF8, 0x3F, 0xFF, 0xF3, 0xFC, 0x3F, 0xFF, 0xF3, 0xFE, 0x3F, 0xFF, 0xF3,
++    0xFE, 0x3F, 0xFF, 0xF3, 0xFC, 0x3F, 0xFF, 0xF3, 0xF8, 0x3F, 0xFF, 0xF3, 0xF1, 0x3F, 0xFF, 0xF3,
++    0xE3, 0x3F, 0xFF, 0xF3, 0xC7, 0x3F, 0xFF, 0xF3, 0xCF, 0x3F, 0xFF, 0xF3, 0xDF, 0x3F, 0xFF, 0xF3,
++    0xFF, 0x3F, 0xFF, 0xF3, 0xFF, 0x3F, 0xFF, 0xF3, 0xFF, 0x3F, 0xFF, 0xF3, 0xFF, 0x1F, 0xFF, 0xF3,
++    0xFF, 0x80, 0x00, 0x03, 0xFF, 0xC0, 0x00, 0x07, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
++};
+diff --git a/src/components/themes/BaseTheme.h b/src/components/themes/BaseTheme.h
+index 1d321d75021f987b194cb528dbcf320d34d6bb16..745c5081eb403cb538399d799f3475a45d74409e 100644
+--- a/src/components/themes/BaseTheme.h
++++ b/src/components/themes/BaseTheme.h
+@@ -101,7 +101,22 @@ struct ThemeMetrics {
+   int textFieldLineEndOffset;
+ };
+ 
+-enum UIIcon { None = 0, Folder, Text, Image, Book, File, Recent, Settings, Transfer, Library, Wifi, Hotspot, Bookmark };
++enum UIIcon {
++  None = 0,
++  Folder,
++  Text,
++  Image,
++  Book,
++  File,
++  Recent,
++  Settings,
++  Transfer,
++  Library,
++  Wifi,
++  Hotspot,
++  Bookmark,
++  Tv,
++};
+ 
+ // Default theme implementation (Classic Theme)
+ // Additional themes can inherit from this and override methods as needed
+diff --git a/src/components/themes/lyra/LyraTheme.cpp b/src/components/themes/lyra/LyraTheme.cpp
+index c3d772a5e6a204a07b40f439ab84110a3141f5db..f38f1dda1d9f5152673ada695441075efd3a913d 100644
+--- a/src/components/themes/lyra/LyraTheme.cpp
++++ b/src/components/themes/lyra/LyraTheme.cpp
+@@ -27,6 +27,7 @@
+ #include "components/icons/settings2.h"
+ #include "components/icons/text24.h"
+ #include "components/icons/transfer.h"
++#include "components/icons/tv.h"
+ #include "components/icons/wifi.h"
+ #include "fontIds.h"
+ 
+@@ -77,6 +78,8 @@ const uint8_t* iconForName(UIIcon icon, int size) {
+         return HotspotIcon;
+       case UIIcon::Bookmark:
+         return BookmarkIcon;
++      case UIIcon::Tv:
++        return TvIcon;
+       default:
+         return nullptr;
+     }
 diff --git a/src/main.cpp b/src/main.cpp
-index e9d4107b..26bc003e 100644
+index e9d4107b539bc832995a44804f51c4f6d05349a2..573a3eb654acd5000ccfa2482486e13478e216c0 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -13,6 +13,7 @@
+@@ -13,6 +13,8 @@
  #include <HalTiltSensor.h>
  #include <I18n.h>
  #include <Logging.h>
++#include <PowerManager.h>
 +#include <esp_sleep.h>
  #include <SPI.h>
  #include <WiFi.h>
  #include <builtinFonts/all.h>
-@@ -26,6 +27,7 @@
+@@ -26,6 +28,7 @@
  #include "OpdsServerStore.h"
  #include "RecentBooksStore.h"
  #include "SdCardFontSystem.h"
@@ -8463,7 +8756,7 @@ index e9d4107b..26bc003e 100644
  #include "activities/Activity.h"
  #include "activities/ActivityManager.h"
  #include "activities/settings/SdFirmwareUpdateActivity.h"
-@@ -42,6 +44,49 @@ FontDecompressor fontDecompressor;
+@@ -42,6 +45,57 @@ FontDecompressor fontDecompressor;
  SdCardFontSystem sdFontSystem;
  FontCacheManager fontCacheManager(renderer.getFontMap(), renderer.getSdCardFonts());
  static unsigned long allowSleepAt = 0;
@@ -8506,22 +8799,45 @@ index e9d4107b..26bc003e 100644
 +    WiFi.disconnect(true);
 +    WiFi.mode(WIFI_OFF);
 +  }
++  if (gpio.deviceIsX3()) {
++    // X3's four bottom controls share an analog ladder on GPIO1. The rightmost
++    // segment pulls the line low and acts as SugarTV's Wi-Fi shortcut. Keep the
++    // idle level defined in deep sleep so ADC-ladder noise cannot masquerade as
++    // a button wake before the timer fires.
++    pinMode(1, INPUT_PULLUP);
++    freeink::PowerManager::armWakeOnPins(1ULL << 1, true);
++  }
 +  halTiltSensor.deepSleep();
 +  display.deepSleep();
-+  powerManager.startDeepSleep(gpio);
++  powerManager.startDeepSleep(gpio, true);
 +}
-
+ 
  // Fonts
  EpdFont notoserif14RegularFont(&notoserif_14_regular);
-@@ -253,7 +298,6 @@ void setupDisplayAndFonts(bool seamless = false) {
+@@ -253,7 +307,6 @@ void setupDisplayAndFonts(bool seamless = false) {
    renderer.insertFont(UI_10_FONT_ID, ui10FontFamily);
    renderer.insertFont(UI_12_FONT_ID, ui12FontFamily);
    renderer.insertFont(SMALL_FONT_ID, smallFontFamily);
 -
    // Discover and load SD card fonts
    sdFontSystem.begin(renderer);
-
-@@ -309,6 +353,7 @@ void setup() {
+ 
+@@ -261,6 +314,14 @@ void setupDisplayAndFonts(bool seamless = false) {
+ }
+ 
+ void setup() {
++  // Capture the ADC ladder immediately: board probing and SD initialization
++  // take long enough that a deliberate short press may be released by the time
++  // normal input setup finishes. The rightmost segment is the only group-1
++  // button below 750 raw counts; a GPIO wake without that level is noise.
++  constexpr int X3_WIFI_SHORTCUT_MAX_ADC = 750;
++  const bool wifiShortcutHeldAtWake = esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_GPIO &&
++                                      analogRead(1) <= X3_WIFI_SHORTCUT_MAX_ADC;
++
+   BoardConfig::holdPowerRails();
+ 
+   t1 = millis();
+@@ -309,6 +370,7 @@ void setup() {
    SETTINGS.loadFromFile();
    APP_STATE.loadFromFile();
    RECENT_BOOKS.loadFromFile();
@@ -8529,13 +8845,14 @@ index e9d4107b..26bc003e 100644
    I18N.setLanguage(static_cast<Language>(SETTINGS.language));
    KOREADER_STORE.loadFromFile();
    OPDS_STORE.loadFromFile();
-@@ -316,18 +361,27 @@ void setup() {
+@@ -316,18 +378,36 @@ void setup() {
    ButtonNavigator::setMappedInputManager(mappedInputManager);
-
+ 
    const auto wakeupReason = gpio.getWakeupReason();
 +  const bool rtcCycleMarkerPresent = sugarTvWakeMagic == SUGARTV_WAKE_MAGIC;
 +  sugarTvCycleMarkerPresent = Storage.exists(SUGARTV_CYCLE_MARKER_PATH);
 +  bool resumeSugarTvCycle = rtcCycleMarkerPresent || sugarTvCycleMarkerPresent;
++  bool openSugarTvWifi = false;
    switch (wakeupReason) {
      case HalGPIO::WakeupReason::PowerButton:
        LOG_DBG("MAIN", "Verifying power button press duration");
@@ -8550,6 +8867,14 @@ index e9d4107b..26bc003e 100644
 +      } else {
 +        clearSugarTvCycle();
 +        resumeSugarTvCycle = false;
++      }
++      break;
++    case HalGPIO::WakeupReason::ShortcutButton:
++      if (resumeSugarTvCycle && wifiShortcutHeldAtWake) {
++        openSugarTvWifi = true;
++        LOG_INF("SUGARTV", "Button shortcut wake, opening Wi-Fi selection");
++      } else if (resumeSugarTvCycle) {
++        LOG_INF("SUGARTV", "Ignoring unconfirmed button-ladder wake");
        }
        break;
      case HalGPIO::WakeupReason::AfterUSBPower:
@@ -8560,14 +8885,14 @@ index e9d4107b..26bc003e 100644
        break;
      case HalGPIO::WakeupReason::AfterFlash:
        // After flashing, just proceed to boot
-@@ -365,50 +419,56 @@ void setup() {
+@@ -365,50 +445,56 @@ void setup() {
    const BootResume resume = isSilentReboot              ? BootResume::Silent
                              : !APP_STATE.showBootScreen ? BootResume::QuickResume
                                                          : BootResume::Splash;
 +  if (resumeSugarTvCycle)
 +    LOG_INF("SUGARTV", "Resuming scheduled cycle after wake cause %d", esp_sleep_get_wakeup_cause());
    bool allowFastInitialReaderRefresh = false;
-
+ 
 -  setupDisplayAndFonts(resume != BootResume::Splash);
 -
 -  switch (resume) {
@@ -8641,30 +8966,30 @@ index e9d4107b..26bc003e 100644
 +        break;
 +    }
    }
-
+ 
    if (recoveryFirmwareMode) {
      // Skip normal home/reader routing: jump straight into the SD firmware picker.
      activityManager.replaceActivity(
          std::make_unique<SdFirmwareUpdateActivity>(renderer, mappedInputManager, /*recoveryMode=*/true));
 +  } else if (resumeSugarTvCycle) {
-+    activityManager.goToSugarTv(true);
++    activityManager.goToSugarTv(!openSugarTvWifi);
    } else if (HalSystem::isRebootFromPanic()) {
      // If we rebooted from a panic, go to crash report screen to show the panic info
      activityManager.goToCrashReport();
 diff --git a/src/network/HttpDownloader.cpp b/src/network/HttpDownloader.cpp
-index 44a5a543..1f254e23 100644
+index 44a5a543817f1158375bd6ee950b81cb4d011aa7..cf5309fefd43a5cfb9cdda81f944ace660170f5c 100644
 --- a/src/network/HttpDownloader.cpp
 +++ b/src/network/HttpDownloader.cpp
 @@ -12,19 +12,16 @@
  #include <SecureHttpClient.h>
-
+ 
  extern "C" void wolfSSL_Arduino_Serial_Print(const char* const msg) { LOG_DBG("WOLFSSL", "%s", msg); }
 -#else
 +#endif
  #include <esp_crt_bundle.h>
  #include <esp_http_client.h>
 -#endif
-
+ 
  namespace {
 -#if !defined(FREEINK_NET_WOLFSSL)
  // RX holds the response headers. Smaller buffers leave enough contiguous heap
@@ -8676,28 +9001,73 @@ index 44a5a543..1f254e23 100644
  // Per-socket-op timeout. Some OPDS download endpoints are slow to send headers
  // (>15s) and chunked catalogs stall mid-body, so 15s killed them. 60s gives
  // slow servers room. esp_http_client's timeout_ms is uint32, so unlike Arduino
-@@ -47,7 +44,7 @@ bool isRedirect(int status) {
-
+@@ -39,20 +36,40 @@ struct Sink {
+   bool* cancelFlag = nullptr;
+   size_t total = 0;
+   size_t downloaded = 0;
++  uint32_t timeoutStartedAtMs = 0;
++  uint32_t totalTimeoutMs = 0;
+ };
+ 
++bool timedOut(const Sink& sink) {
++  return sink.totalTimeoutMs != 0 &&
++         static_cast<uint32_t>(millis() - sink.timeoutStartedAtMs) >= sink.totalTimeoutMs;
++}
++
++int socketTimeoutMs(const Sink& sink) {
++  if (sink.totalTimeoutMs == 0) return HTTP_TIMEOUT_MS;
++  const uint32_t elapsed = static_cast<uint32_t>(millis() - sink.timeoutStartedAtMs);
++  const uint32_t remaining = elapsed < sink.totalTimeoutMs ? sink.totalTimeoutMs - elapsed : 1;
++  return static_cast<int>(remaining < static_cast<uint32_t>(HTTP_TIMEOUT_MS) ? remaining : HTTP_TIMEOUT_MS);
++}
++
++HttpDownloader::DownloadError timeoutError(const char* transport, const Sink& sink) {
++  LOG_ERR("HTTP", "%s request timed out after %u ms", transport, static_cast<unsigned>(sink.totalTimeoutMs));
++  return HttpDownloader::HTTP_ERROR;
++}
++
+ bool isRedirect(int status) {
+   return status == 301 || status == 302 || status == 303 || status == 307 || status == 308;
+ }
+ 
  #if defined(FREEINK_NET_WOLFSSL)
  HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std::string& username,
 -                                         const std::string& password, Sink& sink) {
 +                                         const std::string& password, const std::string& bearerToken, Sink& sink) {
    std::string url = startUrl;
-
+ 
    for (int hop = 0; hop <= MAX_REDIRECTS; ++hop) {
-@@ -66,6 +63,8 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
++    if (timedOut(sink)) return timeoutError("wolfSSL", sink);
+     freeink::SecureHttpClient http;
+-    http.setTimeout(HTTP_TIMEOUT_MS);
++    http.setTimeout(socketTimeoutMs(sink));
+     http.setInsecure();
+     if (!http.begin(url)) {
+       LOG_ERR("HTTP", "wolfSSL bad URL: %s", url.c_str());
+@@ -66,6 +83,8 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
        const std::string credentials = username + ":" + password;
        const String encoded = base64::encode(credentials.c_str());
        http.addHeader("Authorization", std::string("Basic ") + encoded.c_str());
 +    } else if (!bearerToken.empty()) {
 +      http.addHeader("Authorization", std::string("Bearer ") + bearerToken);
      }
-
+ 
      LOG_DBG("HTTP", "wolfSSL GET: %s", url.c_str());
-@@ -109,14 +108,13 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
+@@ -78,8 +97,9 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
+           if (sink.progress && sink.total > 0) sink.progress(sink.downloaded, sink.total);
+           return true;
+         },
+-        [&sink]() { return sink.cancelFlag && *sink.cancelFlag; });
++        [&sink]() { return (sink.cancelFlag && *sink.cancelFlag) || timedOut(sink); });
+ 
++    if (timedOut(sink)) return timeoutError("wolfSSL", sink);
+     if (http.aborted()) return HttpDownloader::ABORTED;
+     if (status < 0) {
+       LOG_ERR("HTTP", "wolfSSL request failed: %s", url.c_str());
+@@ -109,19 +129,18 @@ HttpDownloader::DownloadError runGetWolf(const std::string& startUrl, const std:
  }
  #endif
-
+ 
 -#if !defined(FREEINK_NET_WOLFSSL)
  // Streams a GET body through sink.write in READ_CHUNK pieces. Uses the manual
  // open/fetch_headers/read path rather than esp_http_client_perform(): perform()
@@ -8710,7 +9080,13 @@ index 44a5a543..1f254e23 100644
    esp_http_client_config_t config = {};
    config.url = url.c_str();
    config.buffer_size = HTTP_RX_BUF;
-@@ -143,6 +141,9 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string&
+   config.buffer_size_tx = HTTP_TX_BUF;
+-  config.timeout_ms = HTTP_TIMEOUT_MS;
++  config.timeout_ms = socketTimeoutMs(sink);
+   // Verify HTTPS against the bundled CA roots. This build has esp-tls
+   // CONFIG_ESP_TLS_INSECURE off, so an unverified TLS handshake can't be set
+   // up at all; the model is public servers over verified https and local
+@@ -143,28 +162,42 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string&
      const std::string credentials = username + ":" + password;
      const String header = "Basic " + base64::encode(credentials.c_str());
      esp_http_client_set_header(client, "Authorization", header.c_str());
@@ -8718,9 +9094,58 @@ index 44a5a543..1f254e23 100644
 +    const std::string header = "Bearer " + bearerToken;
 +    esp_http_client_set_header(client, "Authorization", header.c_str());
    }
-
+ 
    // open()/read() does not auto-follow redirects (only perform() does), so step
-@@ -214,32 +215,31 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string&
+   // 30x responses manually. OPDS download endpoints and the GitHub release CDN
+   // both redirect.
++  if (timedOut(sink)) {
++    esp_http_client_cleanup(client);
++    return timeoutError("HTTP", sink);
++  }
+   esp_err_t err = esp_http_client_open(client, 0);
+   if (err != ESP_OK) {
+     LOG_ERR("HTTP", "open failed: %s", esp_err_to_name(err));
+     esp_http_client_cleanup(client);
+     return HttpDownloader::HTTP_ERROR;
+   }
++  esp_http_client_set_timeout_ms(client, socketTimeoutMs(sink));
+   int64_t contentLength = esp_http_client_fetch_headers(client);
+   int status = esp_http_client_get_status_code(client);
+   for (int hop = 0; isRedirect(status) && hop < MAX_REDIRECTS; ++hop) {
++    if (timedOut(sink)) {
++      esp_http_client_cleanup(client);
++      return timeoutError("HTTP", sink);
++    }
+     if (esp_http_client_set_redirection(client) != ESP_OK) break;
+     esp_http_client_close(client);
++    esp_http_client_set_timeout_ms(client, socketTimeoutMs(sink));
+     err = esp_http_client_open(client, 0);
+     if (err != ESP_OK) {
+       LOG_ERR("HTTP", "redirect open failed: %s", esp_err_to_name(err));
+       esp_http_client_cleanup(client);
+       return HttpDownloader::HTTP_ERROR;
+     }
++    esp_http_client_set_timeout_ms(client, socketTimeoutMs(sink));
+     contentLength = esp_http_client_fetch_headers(client);
+     status = esp_http_client_get_status_code(client);
+   }
+@@ -187,10 +220,15 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string&
+   }
+ 
+   while (true) {
++    if (timedOut(sink)) {
++      esp_http_client_cleanup(client);
++      return timeoutError("HTTP", sink);
++    }
+     if (sink.cancelFlag && *sink.cancelFlag) {
+       esp_http_client_cleanup(client);
+       return HttpDownloader::ABORTED;
+     }
++    esp_http_client_set_timeout_ms(client, socketTimeoutMs(sink));
+     const int read = esp_http_client_read(client, buf.get(), READ_CHUNK);
+     if (read < 0) {
+       LOG_ERR("HTTP", "read error after %zu bytes", sink.downloaded);
+@@ -214,48 +252,56 @@ HttpDownloader::DownloadError runGet(const std::string& url, const std::string&
    }
    return HttpDownloader::OK;
  }
@@ -8747,78 +9172,98 @@ index 44a5a543..1f254e23 100644
  #endif
  }
  }  // namespace
-
+ 
  bool HttpDownloader::fetchUrl(const std::string& url, Stream& outContent, const std::string& username,
 -                              const std::string& password) {
-+                              const std::string& password, const std::string& bearerToken) {
++                              const std::string& password, const std::string& bearerToken,
++                              const uint32_t totalTimeoutMs) {
    LOG_DBG("HTTP", "Fetching: %s", url.c_str());
    Sink sink;
++  sink.timeoutStartedAtMs = millis();
++  sink.totalTimeoutMs = totalTimeoutMs;
    sink.write = [&outContent](const uint8_t* data, size_t len) { return outContent.write(data, len) == len; };
 -  return runGetSecure(url, username, password, sink) == OK;
 +  return runGetSecure(url, username, password, bearerToken, sink) == OK;
  }
-
+ 
  bool HttpDownloader::fetchUrl(const std::string& url, std::string& outContent, const std::string& username,
 -                              const std::string& password) {
-+                              const std::string& password, const std::string& bearerToken) {
++                              const std::string& password, const std::string& bearerToken,
++                              const uint32_t totalTimeoutMs) {
    LOG_DBG("HTTP", "Fetching: %s", url.c_str());
    outContent.clear();  // start clean; the sink appends, so don't carry prior content
    Sink sink;
-@@ -247,15 +247,15 @@ bool HttpDownloader::fetchUrl(const std::string& url, std::string& outContent, c
++  sink.timeoutStartedAtMs = millis();
++  sink.totalTimeoutMs = totalTimeoutMs;
+   sink.write = [&outContent](const uint8_t* data, size_t len) {
      outContent.append(reinterpret_cast<const char*>(data), len);
      return true;
    };
 -  return runGetSecure(url, username, password, sink) == OK;
 +  return runGetSecure(url, username, password, bearerToken, sink) == OK;
  }
-
+ 
  bool HttpDownloader::fetchUrl(const std::string& url, const DataCallback& onData, const std::string& username,
 -                              const std::string& password) {
-+                              const std::string& password, const std::string& bearerToken) {
++                              const std::string& password, const std::string& bearerToken,
++                              const uint32_t totalTimeoutMs) {
    LOG_DBG("HTTP", "Fetching: %s", url.c_str());
    Sink sink;
++  sink.timeoutStartedAtMs = millis();
++  sink.totalTimeoutMs = totalTimeoutMs;
    sink.write = onData;
 -  return runGetSecure(url, username, password, sink) == OK;
 +  return runGetSecure(url, username, password, bearerToken, sink) == OK;
  }
-
+ 
  HttpDownloader::DownloadError HttpDownloader::downloadToFile(const std::string& url, const std::string& destPath,
-@@ -277,7 +277,7 @@ HttpDownloader::DownloadError HttpDownloader::downloadToFile(const std::string&
+@@ -277,7 +323,7 @@ HttpDownloader::DownloadError HttpDownloader::downloadToFile(const std::string&
    sink.cancelFlag = cancelFlag;
    sink.write = [&file](const uint8_t* data, size_t len) { return file.write(data, len) == len; };
-
+ 
 -  const DownloadError result = runGetSecure(url, username, password, sink);
 +  const DownloadError result = runGetSecure(url, username, password, "", sink);
    // Close before any remove() on the same path; DESTRUCTOR_CLOSES_FILE would
    // otherwise close only after the remove.
    file.close();
 diff --git a/src/network/HttpDownloader.h b/src/network/HttpDownloader.h
-index c52b790d..7e064014 100644
+index c52b790de2cbe57d85cd5773565bd6dec35e6248..af788c824bd634adcba02ca2a7f180b8cc2d7628 100644
 --- a/src/network/HttpDownloader.h
 +++ b/src/network/HttpDownloader.h
-@@ -27,16 +27,16 @@ class HttpDownloader {
+@@ -1,6 +1,7 @@
+ #pragma once
+ #include <HalStorage.h>
+ 
++#include <cstdint>
+ #include <functional>
+ #include <string>
+ 
+@@ -27,16 +28,19 @@ class HttpDownloader {
     * Fetch text content from a URL with optional credentials.
     */
    static bool fetchUrl(const std::string& url, std::string& outContent, const std::string& username = "",
 -                       const std::string& password = "");
-+                       const std::string& password = "", const std::string& bearerToken = "");
-
++                       const std::string& password = "", const std::string& bearerToken = "",
++                       uint32_t totalTimeoutMs = 0);
+ 
    static bool fetchUrl(const std::string& url, Stream& stream, const std::string& username = "",
 -                       const std::string& password = "");
-+                       const std::string& password = "", const std::string& bearerToken = "");
-
++                       const std::string& password = "", const std::string& bearerToken = "",
++                       uint32_t totalTimeoutMs = 0);
+ 
    /**
     * Stream the response body to onData as it arrives, without buffering it.
     */
    static bool fetchUrl(const std::string& url, const DataCallback& onData, const std::string& username = "",
 -                       const std::string& password = "");
-+                       const std::string& password = "", const std::string& bearerToken = "");
-
++                       const std::string& password = "", const std::string& bearerToken = "",
++                       uint32_t totalTimeoutMs = 0);
+ 
    /**
     * Download a file to the SD card with optional credentials.
 diff --git a/tools/generate_sugartv_icons.py b/tools/generate_sugartv_icons.py
 new file mode 100644
-index 00000000..92ca87bc
+index 0000000000000000000000000000000000000000..92ca87bc2cb901afb40dc8c76e09328b0da60070
 --- /dev/null
 +++ b/tools/generate_sugartv_icons.py
 @@ -0,0 +1,63 @@
@@ -8887,11 +9332,12 @@ index 00000000..92ca87bc
 +    main()
 diff --git a/tools/render_sugartv_frame.cpp b/tools/render_sugartv_frame.cpp
 new file mode 100644
-index 00000000..52aed4c1
+index 0000000000000000000000000000000000000000..1ead17610718f8c1a73defe32fcfe36c14292a8c
 --- /dev/null
 +++ b/tools/render_sugartv_frame.cpp
-@@ -0,0 +1,117 @@
+@@ -0,0 +1,118 @@
 +#include <builtinFonts/sugartv_battery_8.h>
++#include <builtinFonts/notosans_8_regular.h>
 +#include <builtinFonts/sugartv_delta_34.h>
 +#include <builtinFonts/sugartv_prediction_14.h>
 +#include <builtinFonts/sugartv_relative_18.h>
@@ -8982,7 +9428,7 @@ index 00000000..52aed4c1
 +  const bool updateFailed = std::string(argv[15]) == "1";
 +  const std::string status = std::string(updateFailed ? "Update failed at " : "Updated at ") + argv[6];
 +  const sugartv::FrameFonts fonts{&sugartv_value_108, &sugartv_delta_34, &sugartv_relative_18,
-+                                 &sugartv_prediction_14, &sugartv_battery_8};
++                                 &sugartv_prediction_14, &sugartv_battery_8, &notosans_8_regular};
 +  const sugartv::FrameContent content{argv[2],
 +                                     argv[3],
 +                                     delta == "none" ? nullptr : argv[4],
@@ -9010,7 +9456,7 @@ index 00000000..52aed4c1
 +}
 diff --git a/tools/render_sugartv_preview.py b/tools/render_sugartv_preview.py
 new file mode 100644
-index 00000000..4fb5127f
+index 0000000000000000000000000000000000000000..4fb5127f7c406e688e55f9ca77feb0d0c7c661f1
 --- /dev/null
 +++ b/tools/render_sugartv_preview.py
 @@ -0,0 +1,191 @@
@@ -9207,7 +9653,7 @@ index 00000000..4fb5127f
 +    main()
 diff --git a/tools/test_sugartv_discovery.py b/tools/test_sugartv_discovery.py
 new file mode 100644
-index 00000000..65f41ef5
+index 0000000000000000000000000000000000000000..65f41ef504f30f7aea30c5de238e2bb83b088633
 --- /dev/null
 +++ b/tools/test_sugartv_discovery.py
 @@ -0,0 +1,86 @@
@@ -9299,7 +9745,7 @@ index 00000000..65f41ef5
 +    main()
 diff --git a/tools/test_sugartv_logic.cpp b/tools/test_sugartv_logic.cpp
 new file mode 100644
-index 00000000..58eaf66a
+index 0000000000000000000000000000000000000000..58eaf66aad10d2db64365a99a24d3824566be096
 --- /dev/null
 +++ b/tools/test_sugartv_logic.cpp
 @@ -0,0 +1,113 @@
@@ -9418,10 +9864,10 @@ index 00000000..58eaf66a
 +}
 diff --git a/tools/test_sugartv_preview.py b/tools/test_sugartv_preview.py
 new file mode 100644
-index 00000000..00b9e075
+index 0000000000000000000000000000000000000000..428c6e634d89e490d9f226313825e9ce48794236
 --- /dev/null
 +++ b/tools/test_sugartv_preview.py
-@@ -0,0 +1,147 @@
+@@ -0,0 +1,166 @@
 +#!/usr/bin/env python3
 +"""Visual contract tests for the on-device SugarTV preview."""
 +
@@ -9470,10 +9916,10 @@ index 00000000..00b9e075
 +        frame = render(FONT, FrameOptions())
 +        self.assertEqual(frame.size, (528, 792))
 +        self.assertEqual(frame.mode, "1")
-+        self.assertEqual(row_bands(frame), [(139, 192), (297, 462), (551, 630)])
++        self.assertEqual(row_bands(frame), [(139, 192), (297, 462), (551, 630), (752, 786)])
 +        self.assertEqual(
 +            hashlib.sha256(frame.tobytes()).hexdigest(),
-+            "d13d97ddff07762ce6a113fa42a5f8ab6ce0c2965cdb97cb54ad38a1b0bbc296",
++            "59056f45e041ecad007d83910dd7be1f4bf67a29b575bfe36857c9279c7df7d5",
 +        )
 +
 +    def test_prediction_moves_primary_content_up(self) -> None:
@@ -9482,6 +9928,16 @@ index 00000000..00b9e075
 +        bands = row_bands(frame)
 +        self.assertLess(bands[0][0], 100)
 +        self.assertTrue(any(start >= 630 for start, _ in bands))
++
++    def test_manage_wifi_hint_matches_the_rightmost_lyra_button(self) -> None:
++        frame = render(FONT, FrameOptions())
++        self.assertEqual(frame.getpixel((423, 752)), 0)
++        self.assertEqual(frame.getpixel((363, 758)), 0)
++        self.assertEqual(frame.getpixel((482, 758)), 0)
++        self.assertEqual(frame.getpixel((423, 791)), 255)
++        self.assertEqual(frame.getpixel((362, 760)), 255)
++        self.assertEqual(frame.getpixel((483, 760)), 255)
++        self.assertGreater(ink_count(frame.crop((363, 752, 483, 792))), 200)
 +
 +    def test_age_density_is_monotonic(self) -> None:
 +        current = ink_count(render(FONT, FrameOptions()))
@@ -9560,6 +10016,15 @@ index 00000000..00b9e075
 +        self.assertIn("nullptr,", value_header)
 +        self.assertIn("nullptr,", delta_header)
 +        self.assertIn("// %", (ROOT / "lib/EpdFont/builtinFonts/notosans_8_regular.h").read_text())
++
++    def test_tv_menu_icon_has_a_white_background_and_crosspoint_weight(self) -> None:
++        icon_header = (ROOT / "src/components/icons/tv.h").read_text()
++        icon_bytes = bytes(int(value, 16) for value in re.findall(r"0x([0-9A-F]{2})", icon_header))
++        self.assertEqual(len(icon_bytes), 32 * 32 // 8)
++        black_pixels = sum(8 - bin(value).count("1") for value in icon_bytes)
++        self.assertEqual(black_pixels, 213)
++        self.assertIn(0xFF, icon_bytes)
++        self.assertNotIn(0x00, icon_bytes[:4])
 +
 +    def test_matrix_covers_all_declared_states(self) -> None:
 +        matrix = render_matrix(FONT)

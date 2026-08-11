@@ -19,22 +19,29 @@ remainder of a 60-second cycle. Network and rendering time are deducted from
 the sleep interval; when a cycle itself exceeds 60 seconds, the next wake is
 scheduled one second later. SugarTV adds the timer wake source, then delegates
 the final transition to CrossPoint's `HalPowerManager::startDeepSleep()`. This
-keeps CrossPoint's serial teardown, power-rail shutdown, and power-button wake
-handling in the device's canonical sleep lifecycle. The timer-arm result is
-checked before sleep. If ESP-IDF rejects it, the cycle event records the
-failure and the device restarts instead of entering an unwakeable sleep.
+keeps CrossPoint's serial teardown and power-button wake handling in the
+device's canonical sleep lifecycle. SugarTV preserves the X3 GPIO13 battery
+rail while sleeping because dropping that rail removes power before the timer
+can wake the board; other CrossPoint activities retain the upstream shutdown
+behavior. The timer-arm result is checked before sleep. If ESP-IDF rejects it,
+the cycle event records the failure and the device restarts instead of entering
+an unwakeable sleep.
 
 Timer wakes use a silent path. The retained e-ink frame stays visible while
 CrossPoint initializes and reconnects, so automatic updates do not show a boot
 logo or Wi-Fi progress screen. Manual entry from the CrossPoint home menu still
-shows status and permits backing out. The display is always forced to portrait
-orientation.
+shows status and permits backing out. The retained frame labels the rightmost
+physical button as `Manage Wi-Fi` using CrossPoint's Lyra button treatment.
+That shortcut opens a manual network list with automatic reconnection disabled,
+so the user can actually select a different network. The display is always
+forced to portrait orientation.
 
 Each successful cycle stores the small normalized reading record and its fetch
 time in `/.crosspoint/sugartv-reading.json`. If Wi-Fi connection, Home Assistant
 access, or the selected sensor fails on a later cycle, the renderer uses that
 record instead of silently retaining an apparently current frame. The cached
-value, trend, delta, displayed age, and battery percentage are frozen. The
+value, trend, delta, and displayed age are frozen. Battery percentage is read
+again for every update attempt and remains live on the failure frame. The
 upper-left single-line status normally reads `Updated` with the absolute local
 time of the successful cycle; on failure it changes to `Update failed` with the
 absolute local time of the failed attempt. The next timer wake retries the
@@ -67,12 +74,20 @@ path would see its SSID but have no saved network it is allowed to join.
 The credential store is loaded immediately after SD-card initialization so all
 UI and API consumers observe the persisted list before any Wi-Fi activity runs.
 
+All Home Assistant requests within one SugarTV update share a 20-second total
+HTTP budget. The remaining budget is passed through both the plain-HTTP
+`esp_http_client` path and the HTTPS wolfSSL path, including streamed response
+reads. Captive portals and stalled or unroutable connections therefore reach a
+bounded failed-update frame and sleep rather than trapping the wake cycle.
+
 RTC memory and the durable `/.crosspoint/sugartv-cycle-armed` SD marker record
 that SugarTV owns the next scheduled wake. Either marker resumes SugarTV after
 a deep-sleep, software, USB, or other reset. A short power-button press wakes
 the X3, runs an immediate SugarTV update, and re-arms the next minute. A
 verified power-button hold clears both markers and returns to the normal
-CrossPoint UI.
+CrossPoint UI. SugarTV also arms the X3 button-ladder wake source; only a
+confirmed rightmost-button ADC value opens manual Wi-Fi, while spurious ladder
+wakes resume the scheduled update path.
 
 ## Home Assistant data flow
 

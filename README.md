@@ -8,7 +8,9 @@ required at runtime.
 
 While the SugarTV cycle is active, a short power-button press wakes the X3 and
 requests an immediate update instead of waiting for the next timer wake. Holding
-the power button exits the cycle and returns to the normal CrossPoint UI.
+the power button exits the cycle and returns to the normal CrossPoint UI. The
+screen labels the rightmost physical button as `Manage Wi-Fi`; pressing it opens
+the network list without automatically reconnecting to the current network.
 
 The screen follows the behavior of `homeassistant-sugartv-card`: source and
 trend resolution for common glucose integrations, measurement timestamps,
@@ -18,10 +20,11 @@ the one-bit panel: low and high readings gain an outline, urgent readings invert
 the frame, and stale readings use ordered ink density. The upper-right value is
 the battery percentage measured by the X3. The upper-left status always shows
 the result and local time of the latest update attempt: `Updated at Aug 9, 3:55 PM`
-after success or `Update failed at Aug 9, 3:56 PM` after failure. If Wi-Fi, Home
+after success or `Update failed at Aug 9, 3:56 PM` after failure. The battery is
+measured on every update attempt, including failures. If Wi-Fi, Home
 Assistant, or the configured glucose sensor is unavailable, the last successful
 reading remains visible without changing its value, trend, delta, displayed
-age, or battery percentage.
+age, while the battery percentage remains live.
 
 This is an informational display, not a medical device or a source for
 treatment decisions.
@@ -90,6 +93,11 @@ and permits one scan-confirmed retry of the original network. The attempt set
 remains bounded, so an unavailable network cannot trap the device awake. A
 manually selected open network is saved automatically with an empty password so
 later headless wakes can reconnect to it.
+
+Each SugarTV update has a shared 20-second HTTP budget across its Home Assistant
+requests. A Wi-Fi network with a captive portal, a stalled response, or no
+internet route therefore produces a failed update and returns the device to its
+normal sleep cadence instead of leaving it awake indefinitely.
 
 The saved-network store is loaded immediately after SD-card initialization, so
 the device UI and API do not temporarily report an empty list before the first
