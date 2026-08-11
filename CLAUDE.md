@@ -25,6 +25,8 @@ dedicated Xteink X3.
   Wi-Fi progress off the retained e-ink frame.
 - Complete each wake cycle on a 60-second wall-clock cadence by deducting active
   work from the subsequent deep-sleep interval.
+- Keep the firmware default timezone at `PST8PDT,M3.2.0,M11.1.0`; a missing
+  build flag must not make the dedicated X3 display UTC.
 - The direct firmware embeds the Home Assistant token. Never include a real
   token, private Home Assistant hostname, or credential-bearing build output in
   tracked files, logs, fixtures, or artifacts.

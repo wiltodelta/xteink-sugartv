@@ -123,6 +123,13 @@ locale from which to derive number formatting.
 
 ## Rendering states
 
+![Synthetic matrix rendered by the firmware C++ renderer](images/sugartv-state-matrix.png)
+
+The matrix is generated from synthetic values by
+`scripts/generate_firmware_screenshots.py`; no device or Home Assistant data is
+used. Each cell still executes the same renderer, bitmap fonts, and icon assets
+as the firmware.
+
 The renderer ports the card's portrait hierarchy and English prediction copy.
 Firmware and local preview execute the same hardware-independent C++ renderer,
 using the same 1-bit pixel primitives, bitmap fonts, layout constants, and icon

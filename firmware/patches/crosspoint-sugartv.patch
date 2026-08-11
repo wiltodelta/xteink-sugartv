@@ -6475,7 +6475,7 @@ index 84bd62ec99daba7d7f361b52815c908b37322a97..80a91d518bfcf738684d2c1d09ca87c1
    int getMenuItemCount() const;
 diff --git a/src/activities/network/SugarTvActivity.cpp b/src/activities/network/SugarTvActivity.cpp
 new file mode 100644
-index 0000000000000000000000000000000000000000..30eb1ada8dda64e7c908a5cfc9737a35cacb3f51
+index 0000000000000000000000000000000000000000..f6901c09eade7345d6ff2875c981748ad1a80649
 --- /dev/null
 +++ b/src/activities/network/SugarTvActivity.cpp
 @@ -0,0 +1,929 @@
@@ -6521,7 +6521,7 @@ index 0000000000000000000000000000000000000000..30eb1ada8dda64e7c908a5cfc9737a35
 +#error "SUGARTV_HA_TOKEN must be defined"
 +#endif
 +#ifndef SUGARTV_TZ
-+#define SUGARTV_TZ "UTC0"
++#define SUGARTV_TZ "PST8PDT,M3.2.0,M11.1.0"
 +#endif
 +
 +namespace {
