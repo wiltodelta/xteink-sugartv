@@ -7,7 +7,8 @@ dedicated Xteink X3.
 ## How to run
 
 - `firmware/patches/crosspoint-sugartv.patch` is the canonical CrossPoint patch,
-  pinned to upstream commit `e00f5958dfeea2a3e640c39eb78186fd20996f4b`.
+  generated against upstream commit `e00f5958dfeea2a3e640c39eb78186fd20996f4b`;
+  nothing enforces that hash, so update it here whenever the patch is rebased.
 - In a patched CrossPoint checkout, compile and run `tools/test_sugartv_logic.cpp`,
   then run `python3 tools/test_sugartv_preview.py` before building firmware.
 - `uv run uvicorn xteink_sugartv.app:app --host 0.0.0.0 --port 8000` starts the legacy
